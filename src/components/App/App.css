@@ -1,0 +1,19 @@
+.page {
+  width: min(100%, 1280px);
+  height: 100vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+.font-smoothed {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.content-section {
+  padding: 0 var(--side-margin, 70px);
+}
+@media screen and (max-width: 768px) {
+  .content-section {
+    --side-margin: 30px;
+  }
+}

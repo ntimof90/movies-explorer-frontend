@@ -1,0 +1,12 @@
+:root {
+  --bg-color: #202020;
+  --bg-extra-color: #272727;
+  --accent-color: #3DDC84;
+  --text-color: #fff;
+  --text-extra-color: #8B8B8B;
+  --cell-color: #303030;
+  --link-color: #4285F4;
+  --font: Inter;
+  --side-margin: 70px;
+  --button-bg-color: #313131;
+}

@@ -1,0 +1,37 @@
+.footer {
+  box-sizing: border-box;
+  min-height: 172px;
+  padding-top: 79px;
+  padding-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.footer__title {
+  font-feature-settings: 'clig' off, 'liga' off;
+  text-align: center;
+  font-weight: 400;
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-extra-color);
+}
+.footer__line {
+  width: 100%;
+  border: 1px solid #424242;
+  margin: 0;
+}
+.footer__block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer__text {
+  font-size: 13px;
+  font-feature-settings: 'clig' off, 'liga' off;
+  font-weight: 400;
+  margin: 0;
+}
+.footer__links {
+  display: flex;
+  gap: 20px;
+}

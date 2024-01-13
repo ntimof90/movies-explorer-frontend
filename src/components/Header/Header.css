@@ -1,0 +1,117 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 74px;
+  /* padding: 0 var(--side-margin, 70px); */
+}
+.header__logo {
+  display: block;
+  width: 38px;
+  height: 38px;
+  /* margin-right: auto; */
+  /* position: absolute;
+  left: 0;
+  top: 0; */
+}
+.header__menu {
+  /* width: 50%; */
+  /* display: flex;
+  font-weight: 400;
+  align-items: center; */
+  flex-grow: 1;
+  /* transform: translateX(-19px);
+  justify-content: center; */
+}
+.header__menu_type_unauth {
+  gap: 30px;
+  font-size: 12px;
+}
+.header__menu_type_auth {
+  gap: 16px;
+  font-size: 13px;
+}
+.header__button {
+  width: 100px;
+  height: 32px;
+  border: none;
+  border-radius: 20px;
+  color: var(--text-color);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.14;
+  text-align: center;
+  background-color: #313131;
+  /* margin-left: auto; */
+}
+.header__button:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+.link {
+  color: var(--text-color);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.link:hover {
+  opacity: 0.7;
+}
+.button {
+  border: none;
+  border-radius: 3px;
+  padding: 8px 20px;
+  color: #000;
+  font-weight: 500;
+  font-size: inherit;
+  text-decoration: none;
+  background-color: var(--accent-color);
+}
+
+.button:hover {
+  opacity: 0.8;
+}
+.header__nav-button {
+  display: none;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: none;
+  background-image: url(../../images/navicon.svg);
+  background-position: center;
+  background-size: cover;
+  cursor: pointer;
+}
+@media screen and (max-width: 768px) {
+  .header {
+    --side-margin: 30px;
+  }
+  .header__nav-button {
+    display: block;
+  }
+  .header__menu {
+    display: none;
+  }
+  .header__button {
+    display: none;
+  }
+  /* .header__button {
+    display: none;
+  } */
+}
+
+
+
+.header__menu-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 16px;
+  margin-left: 62px;
+  padding: 0;
+  list-style: none;
+  /* position: relative;
+  left: calc(100px - 38px); */
+  /* position: relative;
+  right: 38px; */
+  /* width: 50%; */
+}
