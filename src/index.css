@@ -3,8 +3,6 @@
 @import url(./vendor/variables.css);
 
 :root {
-  max-width: 100vw;
-  min-height: 100vh;
   color: var(--text-color, #fff);
   font-family: var(--font, serif);
   background-color: var(--bg-color, #202020);

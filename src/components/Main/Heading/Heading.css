@@ -1,0 +1,27 @@
+.section-title {
+  margin: 0;
+  font-weight: 400;
+  font-size: 22px;
+  letter-spacing: -0.88px;
+  text-align: left;
+}
+.section-title::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 1px;
+  margin-top: 23px;
+  background-color: var(--heading-line-color, #DADADA);
+}
+@media screen and (max-width: 1024px) {}
+@media screen and (max-width: 768px) {}
+@media screen and (max-width: 625px) {}
+@media screen and (max-width: 425px) {
+  .section-title {
+    font-size: 18px;
+    letter-spacing: -0.72px;
+  }
+  .section-title::after {
+    margin-top: 28px;
+  }
+}

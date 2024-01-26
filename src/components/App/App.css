@@ -1,5 +1,5 @@
 .page {
-  width: min(100%, 1280px);
+  width: clamp(320px, 100%, 1280px);
   height: 100vh;
   margin: 0 auto;
   display: flex;
@@ -10,10 +10,34 @@
   -moz-osx-font-smoothing: grayscale;
 }
 .content-section {
-  padding: 0 var(--side-margin, 70px);
+  padding-left: var(--side-margin, 70px);
+  padding-right: var(--side-margin, 70px);
 }
-@media screen and (max-width: 768px) {
+.button {
+  text-decoration: none;
+  text-align: center;
+}
+.button:hover {
+  cursor: pointer;
+  opacity: .8;
+}
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+.link:hover {
+  cursor: pointer;
+  opacity: .7;
+}
+@media screen and (max-width: 1024px) {
   .content-section {
-    --side-margin: 30px;
+    --side-margin: 50px;
+  }
+}
+@media screen and (max-width: 768px) {}
+@media screen and (max-width: 625px) {}
+@media screen and (max-width: 425px) {
+  .content-section {
+    --side-margin: 14px;
   }
 }

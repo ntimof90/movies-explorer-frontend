@@ -1,16 +1,17 @@
 .nav-panel {
   position: fixed;
+  z-index: 999;
   inset: 0 0;
   visibility: hidden;
   opacity: 0;
-  transition: visibility 0s 0.6s, opacity 0.3s 0.3s;
+  transition: visibility 0s 0.6s, opacity 0.3s 0.1s;
   background-color: rgb(0 0 0 / .3);
   cursor: pointer;
 }
 .nav-panel_active {
   visibility: visible;
   opacity: 1;
-  transition: visibility 0s 0s, opacity 0.3s;
+  transition: visibility 0s 0s, opacity 0.1s;
 }
 
 .nav-panel__container {
@@ -29,7 +30,7 @@
 
 .nav-panel_active .nav-panel__container {
   transform: translateX(0);
-  transition: transform 0.3s 0.3s
+  transition: transform 0.3s 0.1s
 }
 
 .nav-panel__close-button {
