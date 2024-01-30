@@ -1,33 +1,98 @@
 .page {
+  display: flex;
+  flex-direction: column;
   width: clamp(320px, 100%, 1280px);
   height: 100vh;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
 }
 .font-smoothed {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 .content-section {
-  padding-left: var(--side-margin, 70px);
   padding-right: var(--side-margin, 70px);
+  padding-left: var(--side-margin, 70px);
+}
+.logo-link {
+  border-radius: 19px;
+  transition: box-shadow .3s;
+}
+.logo-link:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent-color, #3DDC84);
+}
+.logo {
+  display: block;
+  width: 38px;
+  height: 38px;
 }
 .button {
-  text-decoration: none;
   text-align: center;
+  text-decoration: none;
+  transition: box-shadow .3s;
 }
 .button:hover {
-  cursor: pointer;
   opacity: .8;
+  cursor: pointer;
+}
+.button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent-color, #3DDC84);
 }
 .link {
-  text-decoration: none;
   color: inherit;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: box-shadow .3s;
 }
 .link:hover {
-  cursor: pointer;
   opacity: .7;
+  cursor: pointer;
+}
+.link:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 1px var(--accent-color, #3DDC84);
+}
+.account-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 100px;
+  height: 32px;
+  border-radius: 20px;
+  color: var(--text-color, #fff);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.14;
+  background-color: var(--button-bg-color, #313131);
+}
+.input {
+  transition: box-shadow .3s;
+}
+.input:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px inset var(--accent-color, #3DDC84);
+}
+.input:focus:has(+ .input-error_active) {
+  box-shadow: 0 0 0 1px inset var(--input-err-color, #EE3465);
+}
+.input:has(+ .input-error_active) {
+  color: var(--input-err-color, #EE3465);
+}
+.input-error {
+  position: absolute;
+  display: none;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 20px;
+  margin-top: auto;
+  color: var(--input-err-color, #EE3465);
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 1;
+}
+.input-error_active {
+  display: flex;
 }
 @media screen and (max-width: 1024px) {
   .content-section {

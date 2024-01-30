@@ -58,10 +58,10 @@ export default function Profile() {
             />
             <span className={`profile__input-error ${errors.email ? 'profile__input-error_active': ''}`}>{errors.email}</span>
           </label>
-          <button className={`profile__submit ${editMode ? 'profile__submit_active' : ''}`} type='submit'>Сохранить</button>
+          <button className={`profile__submit button ${editMode ? 'profile__submit_active' : ''}`} type='submit'>Сохранить</button>
         </form>
-        <button className={`profile__button ${editMode ? 'profile__button_inactive' : ''}`} type='button' onClick={handleClick}>Редактировать</button>
-        <button className={`profile__button ${editMode ? 'profile__button_inactive' : ''}`} type='button'>Выйти из аккаунта</button>
+        <button className={`profile__button link ${editMode ? 'profile__button_inactive' : ''}`} type='button' onClick={handleClick}>Редактировать</button>
+        <button className={`profile__button link ${editMode ? 'profile__button_inactive' : ''}`} type='button'>Выйти из аккаунта</button>
       </div>
     </div>
   )

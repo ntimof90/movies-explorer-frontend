@@ -1,12 +1,10 @@
-.movies {
+.movie-list {
   width: 100%;
-  padding-bottom: 55px;
-  display: grid;
-  gap: 30px;
-  grid-template-columns: repeat(auto-fit, 360px);
-  justify-content: center;
+  padding-bottom: 80px;
+  display: flex;
+  flex-direction: column;
 }
-.movies__list {
+.movie-list__container {
   display: grid;
   gap: 30px;
   grid-template-columns: repeat(auto-fit, 360px);
@@ -15,88 +13,32 @@
   margin: 0;
   padding: 0;
 }
+.movie-list__container li:nth-child(n + 13) {
+  display: none;
+}
+.movie-list__cardloader {
+  height: 36px;
+  width: 320px;
+  margin: 50px auto 0;
+  border-radius: 6px;
+  background-color: transparent;
+  border: 1px solid #424242;
+  color: var(--text-color, #fff);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: normal;
+}
 @media screen and (max-width: 768px) {
-  .movies__list {
+  .movie-list__container {
     grid-template-columns: repeat(auto-fit, 339px);
     row-gap: 22px;
   }
 }
 @media screen and (max-width: 425px) {
-  .movies__list {
+  .movie-list__container {
     row-gap: 10px;
   }
-}
-
-/* .movie__title {
-  margin: 0;
-  font-size: 13px;
-  font-weight: 500;
-}
-.movie__subtitle {
-  margin: 0;
-  font-size: 11px;
-  line-height: 0.9;
-  font-weight: 400;
-  height: 18px;
-  text-align: center;
-  color: var(--text-extra-color, #8B8B8B);
-  min-width: 52px;
-  background-color: var(--input-bg-color, #2F2F2F);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.movies__more-button {
-  display: block;
-  width: 320px;
-  font-size: 12px;
-  font-weight: 500;
-  background: none;
-  border-radius: 6px;
-  height: 36px;
-  border: 1px solid #424242;
-  color: var(--text-color, #fff);
-  margin: 0 auto;
-}
-
-.movies__more-button_inactive {
-  display: none;
-}
-.movie__save-button {
-  position: absolute;
-  z-index: 1;
-  background-color: var(--button-bg-color, #313131);
-  top: 14px;
-  right: 14px;
-  border: none;
-  color: var(--text-color, #fff);
-  font-weight: 400;
-  line-height: 0.9;
-  font-size: 10px;
-  padding: 6px 7px;
-  border-radius: 30px;
-}
-.movie__delete-button {
-  background-image: url(../../images/saved-icon.svg);
-  width: 21px;
-  height: 21px;
-  position: absolute;
-  z-index: 1;
-  top: 14px;
-  right: 14px;
-  border: none;
-  border-radius: 10.5px;
-}
-@media screen and (max-width: 425px) {
-  .movies__list {
-    grid-template-columns: repeat(auto-fit, 300px);
-  }
-  .movie__cover {
-    width: 300px;
-    height: 168px;
-  }
-  .movies__more-button {
+  .movie-list__cardloader {
     width: 240px;
   }
-} */
+}

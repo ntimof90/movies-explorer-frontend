@@ -13,7 +13,6 @@
   opacity: 1;
   transition: visibility 0s 0s, opacity 0.1s;
 }
-
 .nav-panel__container {
   display: flex;
   flex-direction: column;
@@ -27,13 +26,11 @@
   transform: translateX(min(520px, 100%));;
   transition: transform 0.3s 0s;
 }
-
 .nav-panel_active .nav-panel__container {
   transform: translateX(0);
   transition: transform 0.3s 0.1s
 }
-
-.nav-panel__close-button {
+.nav-panel__x-button {
   align-self: flex-end;
   width: 22px;
   height: 22px;
@@ -46,12 +43,6 @@
   background-position: center;
   background-size: cover;
 }
-
-.nav-panel__close-button:hover {
-  opacity: .8;
-  cursor: pointer;
-}
-
 .nav-panel__menu-list {
   display: flex;
   flex-direction: column;
@@ -61,22 +52,18 @@
   padding: 0;
   list-style: none;
 }
-
 .nav-panel__link {
   color: var(--text-color, #fff);
   font-weight: 500;
   font-size: 18px;
   text-decoration: none;
 }
-
 .nav-panel__link:hover {
   opacity: 0.8;
 }
-
 .nav-panel__link_active {
   position: relative;
 }
-
 .nav-panel__link_active::after {
   content: '';
   position: absolute;
@@ -86,26 +73,7 @@
   margin-top: 4px;
   background-color: var(--text-color, #fff);
 }
-
-.nav-panel__button {
+.nav-panel__account-button {
   position: fixed;
   bottom: 90px;
-  display: block;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100px;
-  height: 32px;
-  border-radius: 20px;
-  color: var(--text-color, #fff);
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 1.14;
-  text-decoration: none;
-  background-color: var(--button-bg-color, #313131);
-}
-
-.nav-panel__button:hover {
-  opacity: .8;
-  cursor: pointer;
 }

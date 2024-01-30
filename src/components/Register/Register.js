@@ -27,49 +27,52 @@ export default function Register() {
 
   return (
     <div className='auth'>
-      <Link className='auth__logo-link' to='/'><img className='auth__logo' src={logoPath} alt='Логотип.' /></Link>
+      <Link className='auth__logo-container logo-link' to='/'><img className='logo' src={logoPath} alt='Логотип.' /></Link>
       <h2 className='auth__title'>Добро пожаловать!</h2>
       <form className='auth__form' name='registration' action=''>
-      <label className='auth__input-label'>
+        <label className='auth__input-label'>
           <span className='auth__input-title'>Имя</span>
           <input
-            className='auth__input'
+            className='auth__input input'
             type='text'
             name='name'
             minLength='2'
             maxLength='30'
             required
+            autoComplete='off'
             onChange={handleChange}
             autoFocus
           />
-          <span className={`auth__input-error ${errors.name ? 'auth__input-error_active': ''}`}>{errors.name}</span>
+          <span className={`input-error ${errors.name ? 'input-error_active': ''}`}>{errors.name}</span>
         </label>
         <label className='auth__input-label'>
           <span className='auth__input-title'>E-mail</span>
           <input
-            className='auth__input'
+            className='auth__input input'
             type='email'
             name='email'
             required
+            autoComplete='on'
             onChange={handleChange}
           />
-          <span className={`auth__input-error ${errors.email ? 'auth__input-error_active': ''}`}>{errors.email}</span>
+          <span className={`input-error ${errors.email ? 'input-error_active': ''}`}>{errors.email}</span>
         </label>
         <label className='auth__input-label'>
           <span className='auth__input-title'>Пароль</span>
           <input
-            className='auth__input'
+            className='auth__input input'
             type='password'
             name='password'
             required
             minLength='8'
+            autoComplete='off'
             onChange={handleChange}
           />
-          <span className={`auth__input-error ${errors.password ? 'auth__input-error_active': ''}`}>{errors.password}</span>
+          <span className={`input-error ${errors.password ? 'input-error_active': ''}`}>{errors.password}</span>
         </label>
-        <button className='auth__submit' type='submit' disabled={!(formValitidy.name && formValitidy.email && formValitidy.password)}>Зарегистрироваться</button>
+        <button className='auth__submit button' type='submit' disabled={!(formValitidy.name && formValitidy.email && formValitidy.password)}>Зарегистрироваться</button>
       </form>
-      <p className='auth__footer'>Уже зарегистрированы? <Link className='auth__link' to='/signin'>Войти</Link></p>
+      <p className='auth__footer'>Уже зарегистрированы? <Link className='auth__link link' to='/signin'>Войти</Link></p>
     </div>
   )
 }

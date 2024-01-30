@@ -15,7 +15,6 @@ export default function MoviesCard({movie, children}) {
     <article className='movie-card'>
       <div className='movie-card__header'>
         <img className='movie-card__cover' src={movie.thumbnail} alt='Постер фильма.' />
-        <input className='movie-card__toggle' type="checkbox"  id={movie._id} />
         {children}
       </div>
       <div className='movie-card__footer'>

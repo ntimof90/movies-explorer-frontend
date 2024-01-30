@@ -4,17 +4,18 @@ import './SearchForm.css';
 export default function SearchForm() {
   return (
     <section className='search'>
-      <form className='search__form' action=''>
+      <form className='search__form' name='movie' action=''>
         <fieldset className='search__input-fieldset'>
           <input
-            className='search__input'
+            className='search__input input'
             type='text'
             placeholder='Фильм'
+            name='title'
           />
           <button className='search__button button' type='submit'></button>
         </fieldset>
         <label className='search__checkbox-label'>
-          <input className='search__checkbox' type="checkbox" />
+          <input className='search__checkbox' name='isShort' type="checkbox" />
           <span className='search__custom-checkbox'></span>
           <span className='search__checkbox-title'>Короткометражки</span>
         </label>

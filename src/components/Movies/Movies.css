@@ -3,7 +3,7 @@
   flex-direction: column;
   gap: 80px;
   padding-top: 80px;
-  padding-bottom: 140px;
+  flex-grow: 1;
 }
 @media screen and (max-width: 768px) {
   .movie-section {
@@ -15,6 +15,3 @@
     gap: 50px;
   }
 }
-/* .movie-card__toggle:not(:checked) + .movie-card__logo_type_save-button {
-  display: flex;
-} */

@@ -3,7 +3,6 @@
   flex-direction: column;
   gap: 80px;
   padding-top: 80px;
-  padding-bottom: 140px;
 }
 @media screen and (max-width: 425px) {
   .movie-section {

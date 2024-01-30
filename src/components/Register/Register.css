@@ -8,19 +8,11 @@
   height: 100vh;
   margin: 0 auto;
 }
-
-.auth__logo {
-  display: block;
-  width: 38px;
-  height: 38px;
-}
-
 .auth__title {
   margin: 40px 0;
   font-weight: 500;
   font-size: 24px;
 }
-
 .auth__form {
   display: flex;
   flex-direction: column;
@@ -28,19 +20,16 @@
   width: 100%;
   min-height: 380px;
 }
-
 .auth__input-label {
   position: relative;
   width: 100%;
 }
-
 .auth__input-title {
   display: block;
   color: var(--text-extra-color, #8B8B8B);
   font-weight: 400;
   font-size: 10px;
 }
-
 .auth__input-error {
   position: absolute;
   display: none;
@@ -56,7 +45,6 @@
 .auth__input-error_active {
   display: flex;
 }
-
 .auth__input {
   box-sizing: border-box;
   width: 100%;
@@ -68,25 +56,14 @@
   font-weight: 400;
   font-size: 13px;
   background-color: var(--input-bg-color, #2F2F2F);
-  transition: box-shadow .3s;
 }
-.auth__input:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px inset var(--link-color, #4285F4);
-}
-.auth__input:focus:has(+ .auth__input-error_active) {
-  box-shadow: 0 0 0 2px inset var(--input-err-color, #EE3465);
-}
-.auth__input:has(+ .auth__input-error_active) {
-  color: var(--input-err-color, #EE3465);
-}
+
 @media (forced-colors: active) {
   .auth__input:focus {
     outline: 2px solid var(--link-color, #4285F4);
     outline-offset: -2px;
   }
 }
-
 .auth__submit {
   min-height: 45px;
   margin-top: auto;
@@ -107,7 +84,6 @@
   opacity: 1;
   cursor: default;
 }
-
 .auth__footer {
   align-self: center;
   margin: 0;
@@ -116,39 +92,27 @@
   font-weight: 400;
   font-size: 14px;
 }
-
 .auth__link {
   color: var(--link-color, #4285F4);
-  text-decoration: none;
 }
-.auth__link:hover {
-  opacity: .7;
-  cursor: pointer;
-}
-
 @media screen and (max-width: 425px) {
   .auth {
     justify-content: flex-start;
     padding: 56px 30px 30px;
   }
-
-  .auth__logo-link {
+  .auth__logo-container {
     align-self: center;
   }
-
   .auth__title {
     align-self: center;
     text-align: center;
   }
-
   .auth__form {
     height: 100%;
   }
-
   .auth__submit {
     font-size: 12px;
   }
-
   .auth__footer {
     margin-top: 14px;
     font-size: 12px;
