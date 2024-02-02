@@ -1,0 +1,11 @@
+.movie-section {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  padding-top: 80px;
+}
+@media screen and (max-width: 425px) {
+  .movie-section {
+    gap: 50px;
+  }
+}

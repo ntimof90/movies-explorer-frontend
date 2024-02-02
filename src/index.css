@@ -1,0 +1,9 @@
+@import url(./vendor/normalize.css);
+@import url(./vendor/fonts/fonts.css);
+@import url(./vendor/variables.css);
+
+:root {
+  color: var(--text-color, #fff);
+  font-family: var(--font, serif);
+  background-color: var(--bg-color, #202020);
+}

@@ -1,0 +1,36 @@
+.promo__menu-list {
+  display: flex;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.promo__link {
+  display: block;
+  width: 96px;
+  height: 36px;
+  border-radius: 10px;
+  color: var(--text-color);
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 3;
+  text-align: center;
+  text-decoration: none;
+  background-color: var(--button-extra-color, #303030);
+}
+
+@media screen and (max-width: 1024px) {}
+@media screen and (max-width: 768px) {}
+@media screen and (max-width: 625px) {}
+@media screen and (max-width: 425px) {
+  .promo__menu-list {
+    gap: 6px;
+  }
+  .promo__link {
+    width: 82px;
+    height: 26px;
+    border-radius: 6px;
+    font-size: 10px;
+    line-height: 2.6;
+  }
+}
