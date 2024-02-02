@@ -99,8 +99,6 @@
     --side-margin: 50px;
   }
 }
-@media screen and (max-width: 768px) {}
-@media screen and (max-width: 625px) {}
 @media screen and (max-width: 425px) {
   .content-section {
     --side-margin: 14px;

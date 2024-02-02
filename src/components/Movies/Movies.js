@@ -1,19 +1,19 @@
 import React from 'react';
 import './Movies.css';
-import SearchForm from './SearchForm/SearchForm';
+import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import Preloader from '../Preloader/Preloader';
 
-export default function Movies({movieList, isLoading}) {
+export default function Movies({ movieList, isLoading, handleLoading }) {
 
   return (
     <main className='movie-section content-section'>
-      <SearchForm />
+      <SearchForm handleLoading={handleLoading}/>
       {
       isLoading
       ? <Preloader />
-      : <MoviesCardList movieList={movieList}>
+      : <MoviesCardList >
           {movieList.map((movie) => (
             <li key={movie._id}>
               <MoviesCard movie={movie}>

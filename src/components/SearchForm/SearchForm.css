@@ -36,7 +36,7 @@
   height: 44px;
   border: none;
   border-radius: 5px;
-  background-image: url(../../../images/find-button.svg);
+  background-image: url(../../images/find-button.svg);
 }
 
 .search__checkbox-label {
@@ -66,13 +66,13 @@
   width: 36px;
   height: 18px;
   border-radius: 9px;
-  background-image: url(../../../images/checkbox-off.svg);
+  background-image: url(../../images/checkbox-off.svg);
   background-position: center;
   background-size: cover;
   transition: all .3s;
 }
 .search__checkbox:checked + .search__custom-checkbox {
-  background-image: url(../../../images/checkbox-on.svg);
+  background-image: url(../../images/checkbox-on.svg);
 }
 .search__checkbox:focus-visible + .search__custom-checkbox {
   outline: none;

@@ -58,9 +58,6 @@
   font-size: 18px;
   text-decoration: none;
 }
-.nav-panel__link:hover {
-  opacity: 0.8;
-}
 .nav-panel__link_active {
   position: relative;
 }

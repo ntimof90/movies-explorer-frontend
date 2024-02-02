@@ -1,7 +1,7 @@
 import React from 'react';
 import './MoviesCardList.css';
 
-export default function MoviesCardList({ movieList, children }) {
+export default function MoviesCardList({ children }) {
   const handleCardLoaderClick = () => {
     const cards = document.querySelectorAll('.movie-list__container li');
     const button = document.querySelector('.movie-list__cardloader');

@@ -1,10 +1,10 @@
 import React from 'react';
 import './SearchForm.css';
 
-export default function SearchForm() {
+export default function SearchForm({ handleLoading }) {
   return (
     <section className='search'>
-      <form className='search__form' name='movie' action=''>
+      <form className='search__form' name='movie' action='' onSubmit={handleLoading}>
         <fieldset className='search__input-fieldset'>
           <input
             className='search__input input'
