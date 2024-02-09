@@ -1,7 +1,11 @@
 import React from 'react';
 import Auth from '../Auth/Auth';
+import mainApi from '../../utils/MainApi';
+import { useNavigate } from 'react-router-dom';
+import useFormWithValidation from '../../utils/FormHandler';
 
-export default function Login({ errors, handleChange, isValid }) {
+// export default function Login({ form, errors, handleChange, isValid, resetStates, handleLogging }) {
+export default function Login({ handleLogging }) {
   const loginUi = {
     title: 'Рады видеть!',
     button: 'Войти',
@@ -9,8 +13,25 @@ export default function Login({ errors, handleChange, isValid }) {
     link: '/signup',
     linkTitle: 'Регистрация'
   }
+  const navigate = useNavigate();
+  const { handleChange, values, errors, isValid } = useFormWithValidation();
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    mainApi.login(values)
+    .then((data) => {
+      console.log(data);
+      if (data.token) {
+        localStorage.setItem('jwt', data.token);
+        handleLogging();
+        navigate('/movies', { replace: true });
+      }
+    })
+    .catch((e) => console.log(e));
+  }
+
   return (
-    <Auth ui={loginUi} isValid={isValid} formName={'login'}>
+    <Auth ui={loginUi} isValid={isValid} formName={'login'} onSubmit={handleSubmit}>
       <label className='auth__input-label'>
         <span className='auth__input-title'>E-mail</span>
         <input
@@ -18,7 +39,7 @@ export default function Login({ errors, handleChange, isValid }) {
         type='email'
         name='email'
         required
-        autoComplete='on'
+        autoComplete='off'
         onChange={handleChange}
         autoFocus
         />
@@ -32,7 +53,7 @@ export default function Login({ errors, handleChange, isValid }) {
           name='password'
           required
           minLength='8'
-          autoComplete='on'
+          autoComplete='off'
           onChange={handleChange}
         />
         <span className={`input-error ${errors.password ? 'input-error_active': ''}`}>{errors.password}</span>

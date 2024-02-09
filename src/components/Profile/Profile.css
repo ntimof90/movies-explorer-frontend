@@ -42,16 +42,16 @@
   font-size: 11px;
 }
 .profile__input {
-  border: none;
   flex-grow: 1;
+  margin-left: 10px;
+  border: none;
+  padding: 16px 0 16px;
   color: var(--text-color, #fff);
   font-weight: 400;
   font-size: 11px;
   text-align: right;
   background: none;
   transition: color .3s;
-  padding: 16px 0 16px;
-  margin-left: 10px;
 }
 .profile__input:read-only:focus {
   color: var(--text-color, #fff);
@@ -66,6 +66,7 @@
 .profile__submit {
   display: none;
   min-height: 45px;
+  /* align-items: flex-end; */
   margin-top: auto;
   border: none;
   border-radius: 3px;
@@ -116,6 +117,18 @@
 }
 .profile__input:has(+ .profile__input-error_active) {
   color: var(--input-err-color, #EE3465);
+}
+.profile__submit-error {
+  position: absolute;
+  bottom: 65px;
+  width: 100%;
+  margin: 0;
+  color: var(--input-err-color, #EE3465);
+  font-weight: 400;
+  font-size: 11px;
+  font-style: normal;
+  line-height: 13px;
+  text-align: center;
 }
 @media screen and (max-width: 768px) {
   .profile__title {

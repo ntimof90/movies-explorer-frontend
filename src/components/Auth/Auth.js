@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom'
 import './Auth.css';
 import logoPath from '../../images/header-logo.svg';
 
-export default function Auth({ ui, formName, isValid, children }) {
+export default function Auth({ ui, formName, isValid, children, onSubmit }) {
   return (
     <div className='auth'>
       <Link className='auth__logo-link logo-link' to='/'>
         <img className='logo' src={logoPath} alt='Логотип.' />
       </Link>
       <h2 className='auth__title'>{ ui.title }</h2>
-      <form className='auth__form' name={formName} action=''>
+      <form className='auth__form' name={formName} action='' onSubmit={onSubmit}>
          { children }
         <button className='auth__submit button' type='submit' disabled={!isValid}>{ui.button}</button>
       </form>

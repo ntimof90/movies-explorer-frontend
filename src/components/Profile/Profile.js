@@ -1,18 +1,51 @@
 import React from 'react';
 import './Profile.css';
+import useFormWithValidation from '../../utils/FormHandler';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
 
-export default function Profile({ errors, handleChange, isValid }) {
+export default function Profile( { onUserUpdate, onUserReset }) {
+  const user = React.useContext(CurrentUserContext);
+  const { handleChange, resetForm, values, errors, isValid } = useFormWithValidation(user);
   const [editMode, setEditMode] = React.useState(false);
+  const [submitError, setSubmitError] = React.useState('');
   const inputRef = React.createRef();
+
   const handleClick = () => {
     setEditMode(true);
+    // resetForm({name, email});
     inputRef.current.focus();
   }
+
+  // const makeRequest = () => {
+  //   onUserUpdate(values)
+  //   .then(() => {
+  //     setEditMode(false);
+  //     setSubmitError('');
+  //   })
+  //   .catch(e => {
+  //     if (e === 409) setSubmitError('Пользователь с таким email уже существует.')
+  //     else setSubmitError('При обновлении профиля произошла ошибка.')
+  //   });
+  // }
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    onUserUpdate(values)
+    .then(() => {
+      setEditMode(false);
+      setSubmitError('');
+    })
+    .catch(e => {
+      if (e === 409) setSubmitError('Пользователь с таким email уже существует.')
+      else setSubmitError('При обновлении профиля произошла ошибка.')
+    });
+  }
+
   return (
     <div className='profile'>
       <div className="profile__container">
-        <h2 className='profile__title'>Привет, Виталий!</h2>
-        <form className='profile__form' action=''>
+        <h2 className='profile__title'>Привет, {values.name}</h2>
+        <form className='profile__form' action='' onSubmit={handleSubmit}>
           <label className='profile__input-label'>
             <span className='profile__input-title'>Имя</span>
             <input
@@ -23,7 +56,7 @@ export default function Profile({ errors, handleChange, isValid }) {
               required
               name='name'
               onChange={handleChange}
-              defaultValue={'Виталий'}
+              value={values.name}
               readOnly={!editMode}
               autoComplete='off'
               ref={inputRef}
@@ -39,15 +72,16 @@ export default function Profile({ errors, handleChange, isValid }) {
               name='email'
               onChange={handleChange}
               autoComplete='off'
-              defaultValue={'dsf@sdfsd.com'}
+              value={values.email}
               readOnly={!editMode}
             />
             <span className={`profile__input-error ${errors.email ? 'profile__input-error_active': ''}`}>{errors.email}</span>
           </label>
+          {submitError && <p className='profile__submit-error'>{submitError}</p>}
           <button className={`profile__submit button ${editMode ? 'profile__submit_active' : ''}`} disabled={!isValid} type='submit'>Сохранить</button>
         </form>
         <button className={`profile__button link ${editMode ? 'profile__button_inactive' : ''}`} type='button' onClick={handleClick}>Редактировать</button>
-        <button className={`profile__button link ${editMode ? 'profile__button_inactive' : ''}`} type='button'>Выйти из аккаунта</button>
+        <button className={`profile__button link ${editMode ? 'profile__button_inactive' : ''}`} type='button' onClick={onUserReset}>Выйти из аккаунта</button>
       </div>
     </div>
   )
