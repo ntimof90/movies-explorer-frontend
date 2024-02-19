@@ -1,42 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Auth from '../Auth/Auth';
-import mainApi from '../../utils/MainApi';
-import { useNavigate } from 'react-router-dom';
 import useFormWithValidation from '../../utils/FormHandler';
 
-// export default function Register({ form, errors, handleChange, isValid, resetStates }) {
-export default function Register() {
-  const navigate = useNavigate();
+export default function Register({ onRegister }) {
+  const [isLoading, setIsLoading] = useState(false);
   const registerUi = {
-    title: 'Добро пожаловать!',
-    button: 'Зарегистрироваться',
-    footer: 'Уже зарегистрированы?',
+    mainTitle: 'Добро пожаловать!',
+    buttonText: 'Зарегистрироваться',
+    footerText: 'Уже зарегистрированы?',
     link: '/signin',
-    linkTitle: 'Войти'
+    linkText: 'Войти',
+    formName: 'register'
   }
-  const { handleChange, values, errors, isValid } = useFormWithValidation();
+  const { handleChange, handleChangeWithEmailValidation, values, errors, isValid } = useFormWithValidation();
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    mainApi.register(values)
-    .then(() => {
-      const { email, password } = values;
-      mainApi.login({ email, password })
-      .then((data) => {
-        console.log(data);
-        if (data.token) {
-          localStorage.setItem('jwt', data.token);
-          // handleLogging();
-          navigate('/movies', { replace: true });
-        }
-      })
-    })
-    .catch((e) => console.log(e));
+    setIsLoading(true);
+    onRegister(values).finally(() => setIsLoading(false));
   }
   // React.useEffect(() => {
   //   return () => resetForm();
   // }, [resetForm]);
   return (
-    <Auth ui={registerUi} isValid={isValid} formName={'register'} onSubmit={handleSubmit}>
+    <Auth isValid={isValid} onSubmit={handleSubmit} isLoading={isLoading} {...registerUi}>
       <label className='auth__input-label'>
         <span className='auth__input-title'>Имя</span>
         <input
@@ -57,11 +43,10 @@ export default function Register() {
         <input
           className='auth__input input'
           type='email'
-          // pattern={/[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}/v}
           name='email'
           required
           autoComplete='on'
-          onChange={handleChange}
+          onChange={handleChangeWithEmailValidation}
         />
         <span className={`input-error ${errors.email ? 'input-error_active': ''}`}>{errors.email}</span>
       </label>

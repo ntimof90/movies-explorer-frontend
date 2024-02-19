@@ -1,37 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Auth from '../Auth/Auth';
-import mainApi from '../../utils/MainApi';
-import { useNavigate } from 'react-router-dom';
 import useFormWithValidation from '../../utils/FormHandler';
 
-// export default function Login({ form, errors, handleChange, isValid, resetStates, handleLogging }) {
-export default function Login({ handleLogging }) {
+export default function Login({ onLogin }) {
   const loginUi = {
-    title: 'Рады видеть!',
-    button: 'Войти',
-    footer: 'Ещё не зарегистрированы?',
+    mainTitle: 'Рады видеть!',
+    buttonText: 'Войти',
+    footerText: 'Ещё не зарегистрированы?',
     link: '/signup',
-    linkTitle: 'Регистрация'
+    linkText: 'Регистрация',
+    formName: 'login'
   }
-  const navigate = useNavigate();
-  const { handleChange, values, errors, isValid } = useFormWithValidation();
-
+  const [isLoading, setIsLoading] = useState(false);
+  const { handleChange, handleChangeWithEmailValidation, values, errors, isValid } = useFormWithValidation();
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    mainApi.login(values)
-    .then((data) => {
-      console.log(data);
-      if (data.token) {
-        localStorage.setItem('jwt', data.token);
-        handleLogging();
-        navigate('/movies', { replace: true });
-      }
-    })
-    .catch((e) => console.log(e));
+    setIsLoading(true);
+    onLogin(values).finally(() => setIsLoading(false));
   }
 
+  // const handleSubmit = (evt) => {
+  //   evt.preventDefault();
+  //   mainApi.login(values)
+  //   .then((result) => {
+  //     if (result.token) {
+  //       localStorage.setItem('jwt', result.token);
+  //       resetForm();
+  //       onLogin();
+  //       navigate('/movies', { replace: true });
+  //     }
+  //   })
+  //   .catch((e) => console.log(e));
+  // }
+
   return (
-    <Auth ui={loginUi} isValid={isValid} formName={'login'} onSubmit={handleSubmit}>
+    <Auth isValid={isValid} onSubmit={handleSubmit} isLoading={isLoading} {...loginUi}>
       <label className='auth__input-label'>
         <span className='auth__input-title'>E-mail</span>
         <input
@@ -40,7 +43,7 @@ export default function Login({ handleLogging }) {
         name='email'
         required
         autoComplete='off'
-        onChange={handleChange}
+        onChange={handleChangeWithEmailValidation}
         autoFocus
         />
         <span className={`input-error ${errors.email ? 'input-error_active': ''}`}>{errors.email}</span>

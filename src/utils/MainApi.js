@@ -3,9 +3,9 @@ class MainApi {
     this._url = url;
   }
 
-  _checkResponse(res) {
-    if (res.ok) return res.json();
-    return Promise.reject(res.status);
+  _checkResponse(response) {
+    if (response.ok) return response.json();
+    return Promise.reject(response.status);
   }
 
   register({ email, password, name }) {
@@ -29,7 +29,10 @@ class MainApi {
   checkToken(token) {
     return fetch(`${this._url}/users/me`, {
       method: 'GET',
-      headers: {'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json'},
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
     })
     .then(this._checkResponse);
   }
@@ -49,6 +52,29 @@ class MainApi {
       body: JSON.stringify({ email, name })
     })
     .then(this._checkResponse);
+  }
+
+  saveMovie(movie, token) {
+    return fetch(`${this._url}/movies`, {
+      method: 'POST',
+      headers: {'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json'},
+      body: JSON.stringify(movie)
+    })
+      .then(this._checkResponse);
+  }
+  deleteMovie(id, token) {
+    return fetch(`${this._url}/movies/${id}`, {
+      method: 'DELETE',
+      headers: {'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json'},
+    })
+      .then(this._checkResponse);
+  }
+  getMyMovies(token) {
+    return fetch(`${this._url}/movies`, {
+      method: 'GET',
+      headers: {'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json'}
+    })
+      .then(this._checkResponse);
   }
 }
 

@@ -1,3 +1,6 @@
+.movie-card {
+  position: relative;
+}
 .movie-card:hover {
   cursor: pointer;
 }
@@ -85,6 +88,9 @@
   height: 21px;
   background-image: url(../../images/delete-btn.svg);
   border-radius: 10.5px;
+}
+.movie-card:hover .movie-card__logo_type_delete-button {
+  display: block;
 }
 .movie-card:hover .movie-card__toggle:not(:checked) + .movie-card__logo_type_delete-button {
   display: block;

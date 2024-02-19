@@ -1,7 +1,8 @@
 import React from 'react';
 import './MoviesCardList.css';
+import Preloader from '../Preloader/Preloader';
 
-export default function MoviesCardList({ children }) {
+export default function MoviesCardList({ isLoading, children }) {
   const handleCardLoaderClick = () => {
     const cards = document.querySelectorAll('.movie-list__container li');
     const button = document.querySelector('.movie-list__cardloader');
@@ -13,7 +14,8 @@ export default function MoviesCardList({ children }) {
   return (
     <section className='movie-list'>
       <ul className='movie-list__container'>
-        {children}
+        {isLoading && <Preloader />}
+      {children}
       </ul>
       <button className='movie-list__cardloader button' onClick={handleCardLoaderClick}>Ещё</button>
     </section>

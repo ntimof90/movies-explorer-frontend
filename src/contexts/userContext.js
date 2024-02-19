@@ -1,23 +1,21 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { createContext, useEffect, useState } from 'react';
 import mainApi from '../utils/MainApi';
 
 export const CurrentUserContext = createContext();
 
-export const CurrentUserContextProvider = ({ children }) => {
+export const CurrentUserContextConsumer = CurrentUserContext.Consumer;
+
+const createUserContextValue = (loggedIn) => {
   const [user, setUser] = useState({});
+
   const updateUser = (newUser) => {
     const token = localStorage.getItem('jwt');
     return mainApi.editUser(newUser, token)
       .then(result => setUser(result.user));
   };
-  const resetUser = () => {
-    localStorage.removeItem('jwt');
-    setUser({});
-  }
-  const contextValue = { user, updateUser, resetUser };
 
   useEffect(() => {
-    const token = localStorage.getItem('jwt');
     const fetchUser = (token) => {
       mainApi.getUser(token)
         .then(result => {
@@ -26,36 +24,21 @@ export const CurrentUserContextProvider = ({ children }) => {
         })
         .catch(e => console.log(e));
     };
+    if (loggedIn) {
+      const token = localStorage.getItem('jwt');
+      fetchUser(token);
+    } else setUser({});
+  }, [loggedIn]);
 
-    fetchUser(token);
-  }, []);
+  return { user, updateUser };
+};
+
+export const CurrentUserContextProvider = ({ loggedIn, children }) => {
+  const userContextValue = createUserContextValue(loggedIn);
 
   return (
-    <CurrentUserContext.Provider value={ contextValue }>
+    <CurrentUserContext.Provider value={ userContextValue }>
       { children }
     </CurrentUserContext.Provider>
   )
 }
-
-// export const userContext = React.createContext();
-
-// export function UserContextProvider({ children }) {
-//   const [user, setUser] = React.useState({});
-//   const onUserUpdate = (newUser) => {
-//     const token = localStorage.getItem('jwt');
-//     return mainApi.editUser(newUser, token)
-//     .then((data) => {
-//       setUser(data.user);
-//     })
-//   }
-
-//   const onUserReset = () => {
-//     setUser({});
-//   }
-
-//   return (
-//     <userContext.Provider value={{ user, onUserUpdate, onUserReset }}>
-//       { children }
-//     </userContext.Provider>
-//   )
-// }

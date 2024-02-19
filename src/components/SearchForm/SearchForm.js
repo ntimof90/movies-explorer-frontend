@@ -1,10 +1,17 @@
 import React from 'react';
 import './SearchForm.css';
+import { findMovie } from '../../utils/MoviesApi';
 
-export default function SearchForm({ handleLoading }) {
+export default function SearchForm({ handleLoading, handleMovies }) {
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    findMovie()
+    .then((result) => handleMovies(result))
+    .catch(e => console.log(e));
+  }
   return (
     <section className='search'>
-      <form className='search__form' name='movie' action='' onSubmit={handleLoading}>
+      <form className='search__form' name='movie' action='' onSubmit={handleSubmit}>
         <fieldset className='search__input-fieldset'>
           <input
             className='search__input input'

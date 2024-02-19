@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import './Profile.css';
 import useFormWithValidation from '../../utils/FormHandler';
-import CurrentUserContext from '../../contexts/CurrentUserContext';
+import { CurrentUserContext } from '../../contexts/userContext';
 
-export default function Profile( { onUserUpdate, onUserReset }) {
-  const user = React.useContext(CurrentUserContext);
-  const { handleChange, resetForm, values, errors, isValid } = useFormWithValidation(user);
+export default function Profile( { onSignOut }) {
+  const { user, updateUser } = useContext(CurrentUserContext);
+  const { handleChange, handleChangeWithEmailValidation, values, errors, isValid } = useFormWithValidation(user);
   const [editMode, setEditMode] = React.useState(false);
   const [submitError, setSubmitError] = React.useState('');
   const inputRef = React.createRef();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = () => {
     setEditMode(true);
@@ -16,21 +17,10 @@ export default function Profile( { onUserUpdate, onUserReset }) {
     inputRef.current.focus();
   }
 
-  // const makeRequest = () => {
-  //   onUserUpdate(values)
-  //   .then(() => {
-  //     setEditMode(false);
-  //     setSubmitError('');
-  //   })
-  //   .catch(e => {
-  //     if (e === 409) setSubmitError('Пользователь с таким email уже существует.')
-  //     else setSubmitError('При обновлении профиля произошла ошибка.')
-  //   });
-  // }
-
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    onUserUpdate(values)
+    setIsLoading(true);
+    updateUser(values)
     .then(() => {
       setEditMode(false);
       setSubmitError('');
@@ -38,7 +28,8 @@ export default function Profile( { onUserUpdate, onUserReset }) {
     .catch(e => {
       if (e === 409) setSubmitError('Пользователь с таким email уже существует.')
       else setSubmitError('При обновлении профиля произошла ошибка.')
-    });
+    })
+    .finally(() => setIsLoading(false));
   }
 
   return (
@@ -70,7 +61,7 @@ export default function Profile( { onUserUpdate, onUserReset }) {
               type='email'
               required
               name='email'
-              onChange={handleChange}
+              onChange={handleChangeWithEmailValidation}
               autoComplete='off'
               value={values.email}
               readOnly={!editMode}
@@ -78,10 +69,10 @@ export default function Profile( { onUserUpdate, onUserReset }) {
             <span className={`profile__input-error ${errors.email ? 'profile__input-error_active': ''}`}>{errors.email}</span>
           </label>
           {submitError && <p className='profile__submit-error'>{submitError}</p>}
-          <button className={`profile__submit button ${editMode ? 'profile__submit_active' : ''}`} disabled={!isValid} type='submit'>Сохранить</button>
+          <button className={`profile__submit button ${editMode ? 'profile__submit_active' : ''}`} disabled={!isValid || isLoading} type='submit'>{!isLoading ? 'Сохранить' : 'Подождите...'}</button>
         </form>
         <button className={`profile__button link ${editMode ? 'profile__button_inactive' : ''}`} type='button' onClick={handleClick}>Редактировать</button>
-        <button className={`profile__button link ${editMode ? 'profile__button_inactive' : ''}`} type='button' onClick={onUserReset}>Выйти из аккаунта</button>
+        <button className={`profile__button link ${editMode ? 'profile__button_inactive' : ''}`} type='button' onClick={onSignOut}>Выйти из аккаунта</button>
       </div>
     </div>
   )
