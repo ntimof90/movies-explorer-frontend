@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, NavLink } from 'react-router-dom';
 import logoPath from '../../images/header-logo.svg';
 import './Header.css';
 import Navigation from "../Navigation/Navigation";
+import { CurrentUserContext } from "../../contexts/userContext";
+import Preloader from "../Preloader/Preloader";
 
 export default function Header({ loggedIn }) {
+  const { isLoading } = useContext(CurrentUserContext);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   const handleMenuClick = () => setIsMenuOpen(true);
@@ -16,7 +19,18 @@ export default function Header({ loggedIn }) {
   return (
     <>
       <header className='header content-section'>
-        <Link className="logo-link" to='/'><img className='logo' src={logoPath} alt='Логотип.' /></Link>
+        {/* {isLoading
+        ? <Preloader />
+        : <Link className="logo-link" to='/'>
+        <Preloader />
+        <img className='logo' src={logoPath} alt='Логотип.' />
+      </Link>
+        } */}
+        <Link className="logo-link preloader-place" to='/'>
+          {isLoading
+            ? <Preloader />
+            : <img className='logo' src={logoPath} alt='Логотип.' />}
+        </Link>
         {
         !loggedIn
         ? <nav className ='header__menu header__menu_user_unauthorized'>

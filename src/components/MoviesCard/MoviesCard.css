@@ -60,6 +60,9 @@
   border: none;
   border-radius: 10.5px;
 }
+.movie-card__logo_type_check-mark:hover {
+  background-image: url(../../images/delete-btn.svg);
+}
 .movie-card__toggle {
   display: none;
 }

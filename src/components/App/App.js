@@ -18,12 +18,7 @@ import useAuth from '../../utils/useAuth';
 import { CurrentUserContextProvider } from '../../contexts/userContext';
 
 function App() {
-  const [isLoading, setIsLoading] = React.useState(false);
   const { loggedIn, signIn, signUp, signOut } = useAuth();
-
-  const handleLoading = () => {
-    setIsLoading(true);
-  }
 
   return (
     <CurrentUserContextProvider loggedIn={loggedIn}>
@@ -47,8 +42,6 @@ function App() {
                   component={Movies}
                   loggedIn={loggedIn}
                   movieList={movieList}
-                  isLoading={isLoading}
-                  handleLoading={handleLoading}
                 />
               }
             />

@@ -1,14 +1,23 @@
 import React from 'react';
 import './SearchForm.css';
 import { findMovie } from '../../utils/MoviesApi';
+import { useForm } from '../../utils/FormHandler';
 
-export default function SearchForm({ handleLoading, handleMovies }) {
+export default function SearchForm({ handleLoading, handleMovies, onSubmit }) {
+  const { handleChange, values, setValues} = useForm();
+
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    findMovie()
-    .then((result) => handleMovies(result))
-    .catch(e => console.log(e));
+    onSubmit(values);
+    // evt.preventDefault();
+    // findMovie()
+    // .then((result) => handleMovies(result))
+    // .catch(e => console.log(e));
   }
+  // const handleSubmit = (evt) => {
+  //   evt.preventDefault();
+  //   onSubmit(values);
+  // }
   return (
     <section className='search'>
       <form className='search__form' name='movie' action='' onSubmit={handleSubmit}>
@@ -17,7 +26,9 @@ export default function SearchForm({ handleLoading, handleMovies }) {
             className='search__input input'
             type='text'
             placeholder='Фильм'
-            name='title'
+            name='movie'
+            onChange={ handleChange }
+            required
           />
           <button className='search__button button' type='submit'></button>
         </fieldset>

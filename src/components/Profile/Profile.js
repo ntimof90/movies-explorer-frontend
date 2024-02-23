@@ -1,35 +1,43 @@
 import React, { useContext, useState } from 'react';
 import './Profile.css';
-import useFormWithValidation from '../../utils/FormHandler';
+import { useFormWithValidation } from '../../utils/FormHandler';
 import { CurrentUserContext } from '../../contexts/userContext';
 
 export default function Profile( { onSignOut }) {
   const { user, updateUser } = useContext(CurrentUserContext);
-  const { handleChange, handleChangeWithEmailValidation, values, errors, isValid } = useFormWithValidation(user);
+  const { handleChange, handleChangeWithEmailValidation, resetForm, values, errors, isValid } = useFormWithValidation(user);
   const [editMode, setEditMode] = React.useState(false);
-  const [submitError, setSubmitError] = React.useState('');
+  const [submitMessage, setSubmitMessage] = React.useState('');
   const inputRef = React.createRef();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = () => {
+    setSubmitMessage('');
     setEditMode(true);
-    // resetForm({name, email});
     inputRef.current.focus();
+  }
+
+  const onCancelClick = () => {
+    setEditMode(false);
+    if (values !== user) {
+      resetForm(user);
+    }
   }
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
     setIsLoading(true);
     updateUser(values)
-    .then(() => {
-      setEditMode(false);
-      setSubmitError('');
-    })
-    .catch(e => {
-      if (e === 409) setSubmitError('Пользователь с таким email уже существует.')
-      else setSubmitError('При обновлении профиля произошла ошибка.')
-    })
-    .finally(() => setIsLoading(false));
+      .then((newUser) => {
+        setEditMode(false);
+        setSubmitMessage('Профиль успешно обновлен.');
+        resetForm(newUser);
+      })
+      .catch(e => {
+        if (e === 409) setSubmitMessage('Пользователь с таким email уже существует.')
+        else setSubmitMessage('При обновлении профиля произошла ошибка.')
+      })
+      .finally(() => setIsLoading(false));
   }
 
   return (
@@ -68,11 +76,22 @@ export default function Profile( { onSignOut }) {
             />
             <span className={`profile__input-error ${errors.email ? 'profile__input-error_active': ''}`}>{errors.email}</span>
           </label>
-          {submitError && <p className='profile__submit-error'>{submitError}</p>}
-          <button className={`profile__submit button ${editMode ? 'profile__submit_active' : ''}`} disabled={!isValid || isLoading} type='submit'>{!isLoading ? 'Сохранить' : 'Подождите...'}</button>
+          {submitMessage && <p className='profile__submit-error'>{submitMessage}</p>}
+          {
+            editMode &&
+            <>
+              <button className='profile__submit button' disabled={!isValid || isLoading} type='submit'>{!isLoading ? 'Сохранить' : 'Подождите...'}</button>
+              <button className='profile__button link' type='button' onClick={onCancelClick}>Отменить</button>
+            </>
+          }
         </form>
-        <button className={`profile__button link ${editMode ? 'profile__button_inactive' : ''}`} type='button' onClick={handleClick}>Редактировать</button>
-        <button className={`profile__button link ${editMode ? 'profile__button_inactive' : ''}`} type='button' onClick={onSignOut}>Выйти из аккаунта</button>
+        {
+          !editMode &&
+          <>
+            <button className='profile__button link' type='button' onClick={handleClick}>Редактировать</button>
+            <button className='profile__button link' type='button' onClick={onSignOut}>Выйти из аккаунта</button>
+          </>
+        }
       </div>
     </div>
   )

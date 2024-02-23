@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Auth from '../Auth/Auth';
-import useFormWithValidation from '../../utils/FormHandler';
+import { useFormWithValidation } from '../../utils/FormHandler';
 
 export default function Login({ onLogin }) {
   const loginUi = {

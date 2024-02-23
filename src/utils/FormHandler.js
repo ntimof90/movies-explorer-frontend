@@ -1,6 +1,19 @@
 import React from 'react';
 
-export default function useFormWithValidation(initialValues = {}) {
+export function useForm() {
+  const [values, setValues] = React.useState({});
+
+  const handleChange = (event) => {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    setValues({...values, [name]: value});
+  };
+
+  return {values, handleChange, setValues};
+}
+
+export function useFormWithValidation(initialValues = {}) {
   const [values, setValues] = React.useState(initialValues);
   const [errors, setErrors] = React.useState({});
   const [isValid, setIsValid] = React.useState(false);
@@ -12,9 +25,7 @@ export default function useFormWithValidation(initialValues = {}) {
   };
 
   const handleChangeWithEmailValidation = (evt) => {
-    setValues({...values, [evt.target.name]: evt.target.value});
-    setErrors({...errors, [evt.target.name]: evt.target.validationMessage});
-    setIsValid(evt.target.closest('form').checkValidity());
+    handleChange(evt);
     checkTopLevelDomain(evt);
   }
 
