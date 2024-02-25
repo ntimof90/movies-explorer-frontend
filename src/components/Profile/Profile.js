@@ -1,15 +1,19 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './Profile.css';
 import { useFormWithValidation } from '../../utils/FormHandler';
 import { CurrentUserContext } from '../../contexts/userContext';
 
 export default function Profile( { onSignOut }) {
-  const { user, updateUser } = useContext(CurrentUserContext);
+  const { user, isInitialLoading, updateUser } = useContext(CurrentUserContext);
   const { handleChange, handleChangeWithEmailValidation, resetForm, values, errors, isValid } = useFormWithValidation(user);
   const [editMode, setEditMode] = React.useState(false);
   const [submitMessage, setSubmitMessage] = React.useState('');
   const inputRef = React.createRef();
   const [isLoading, setIsLoading] = useState(false);
+
+  // useEffect(() => {
+  //   console.log('sddsddd');
+  // }, []);
 
   const handleClick = () => {
     setSubmitMessage('');
@@ -18,6 +22,7 @@ export default function Profile( { onSignOut }) {
   }
 
   const onCancelClick = () => {
+    setSubmitMessage('');
     setEditMode(false);
     if (values !== user) {
       resetForm(user);
@@ -36,6 +41,7 @@ export default function Profile( { onSignOut }) {
       .catch(e => {
         if (e === 409) setSubmitMessage('Пользователь с таким email уже существует.')
         else setSubmitMessage('При обновлении профиля произошла ошибка.')
+        resetForm(user);
       })
       .finally(() => setIsLoading(false));
   }
@@ -43,7 +49,7 @@ export default function Profile( { onSignOut }) {
   return (
     <div className='profile'>
       <div className="profile__container">
-        <h2 className='profile__title'>Привет, {values.name}</h2>
+        <h2 className='profile__title'>Привет, {isInitialLoading ? '…' : values.name}</h2>
         <form className='profile__form' action='' onSubmit={handleSubmit}>
           <label className='profile__input-label'>
             <span className='profile__input-title'>Имя</span>
@@ -55,10 +61,11 @@ export default function Profile( { onSignOut }) {
               required
               name='name'
               onChange={handleChange}
-              value={values.name}
+              value={isInitialLoading ? '…' : values.name || ''}
               readOnly={!editMode}
               autoComplete='off'
               ref={inputRef}
+              placeholder='Ваше имя'
             />
             <span className={`profile__input-error ${errors.name ? 'profile__input-error_active': ''}`}>{errors.name}</span>
           </label>
@@ -71,16 +78,16 @@ export default function Profile( { onSignOut }) {
               name='email'
               onChange={handleChangeWithEmailValidation}
               autoComplete='off'
-              value={values.email}
+              value={isInitialLoading ? '…' : values.email || ''}
               readOnly={!editMode}
+              placeholder='Ваша почта'
             />
             <span className={`profile__input-error ${errors.email ? 'profile__input-error_active': ''}`}>{errors.email}</span>
           </label>
-          {submitMessage && <p className='profile__submit-error'>{submitMessage}</p>}
-          {
-            editMode &&
+          {submitMessage && <p className='profile__submit-message'>{submitMessage}</p>}
+          {editMode &&
             <>
-              <button className='profile__submit button' disabled={!isValid || isLoading} type='submit'>{!isLoading ? 'Сохранить' : 'Подождите...'}</button>
+              <button className='profile__button profile__button_type_submit link' disabled={!isValid || isLoading} type='submit'>{!isLoading ? 'Сохранить' : 'Подождите...'}</button>
               <button className='profile__button link' type='button' onClick={onCancelClick}>Отменить</button>
             </>
           }
@@ -88,8 +95,8 @@ export default function Profile( { onSignOut }) {
         {
           !editMode &&
           <>
-            <button className='profile__button link' type='button' onClick={handleClick}>Редактировать</button>
-            <button className='profile__button link' type='button' onClick={onSignOut}>Выйти из аккаунта</button>
+            <button className='profile__button link' type='button' disabled={isInitialLoading} onClick={handleClick}>Редактировать</button>
+            <button className='profile__button link' type='button' disabled={isInitialLoading} onClick={onSignOut}>Выйти из аккаунта</button>
           </>
         }
       </div>

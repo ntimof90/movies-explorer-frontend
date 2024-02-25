@@ -13,9 +13,6 @@
   margin: 0;
   padding: 0;
 }
-/* .movie-list__container li:nth-child(n + 13) {
-  display: none;
-} */
 .movie-list__cardloader {
   height: 36px;
   width: 320px;

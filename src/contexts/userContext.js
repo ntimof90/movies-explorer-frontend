@@ -11,7 +11,7 @@ export const CurrentUserMoviesContext = createContext();
 
 const createUserContextValue = (loggedIn) => {
   const [user, setUser] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isInitialLoading, setUserLoading] = useState(false);
   const userMovies = useRef([]);
 
   const updateUser = (newUser) => {
@@ -27,7 +27,7 @@ const createUserContextValue = (loggedIn) => {
   useEffect(() => {
     // setIsLoading(true);
     const fetchUserData = (token) => {
-      setIsLoading(true);
+      // setUserLoading(true);
       Promise.all([mainApi.getUser(token), mainApi.getMyMovies(token)])
         .then(([user, movies]) => {
           const { name, email } = user.user;
@@ -36,7 +36,7 @@ const createUserContextValue = (loggedIn) => {
           console.log('sdfds');
         })
         .catch(e => console.log(e))
-        .finally(() => setIsLoading(false));
+        // .finally(() => setUserLoading(false))
     }
 
     if (loggedIn) {
@@ -49,10 +49,10 @@ const createUserContextValue = (loggedIn) => {
 };
 
 export const CurrentUserContextProvider = ({ loggedIn, children }) => {
-  const { user, userMovies, updateUser, isLoading } = createUserContextValue(loggedIn);
+  const { user, userMovies, updateUser } = createUserContextValue(loggedIn);
 
   return (
-    <CurrentUserContext.Provider value={ { user, updateUser, isLoading } }>
+    <CurrentUserContext.Provider value={ { user, updateUser } }>
       <CurrentUserMoviesContext.Provider value={ userMovies }>
         { children }
       </CurrentUserMoviesContext.Provider>

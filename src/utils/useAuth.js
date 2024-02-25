@@ -21,8 +21,12 @@ export default function useAuth() {
 
   const signUp = ({ name, email, password }) => {
     return mainApi.register({ name, email, password })
-      .then(() => {
-        signIn({ email, password })
+      .then((result) => {
+        if (result.token) {
+          localStorage.setItem('jwt', result.token);
+          setLoggedIn(true);
+          navigate('/movies', { replace: true });
+        }
       })
       .catch(e => console.log(e))
   };

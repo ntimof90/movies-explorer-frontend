@@ -12,7 +12,7 @@ export default function Login({ onLogin }) {
     formName: 'login'
   }
   const [isLoading, setIsLoading] = useState(false);
-  const { handleChange, handleChangeWithEmailValidation, values, errors, isValid } = useFormWithValidation();
+  const { handleChange, handleChangeWithEmailValidation, values, errors, isValid } = useFormWithValidation(null);
   const handleSubmit = (evt) => {
     evt.preventDefault();
     setIsLoading(true);

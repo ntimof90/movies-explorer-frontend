@@ -87,9 +87,16 @@
   font-size: 13px;
   background: none;
 }
+.profile__button_type_submit {
+  margin-top: auto;
+}
 .profile__button:last-child {
   color: var(--input-err-color, #EE3465);
   font-weight: 500;
+}
+.profile__button:disabled {
+  cursor: default;
+  opacity: .5;
 }
 .profile__input-error {
   position: absolute;
@@ -112,11 +119,11 @@
 .profile__input:has(+ .profile__input-error_active) {
   color: var(--input-err-color, #EE3465);
 }
-.profile__submit-error {
+.profile__submit-message {
   position: absolute;
   bottom: 65px;
   width: 100%;
-  margin: 0;
+  margin: auto 0 0;
   color: var(--input-err-color, #EE3465);
   font-weight: 400;
   font-size: 11px;

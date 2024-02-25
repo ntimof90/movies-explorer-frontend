@@ -173,7 +173,7 @@ export default function Movies({ movieList, handleLoading }) {
           <li key={movie.movieId}>
             <MoviesCard movie={movie}>
               {/* <input className='movie-card__toggle' type="checkbox" defaultChecked={isSaved(movie.movieId)}  id={movie.movieId} onChange={(evt) => { setChecked(!checked); handleSaveClick(movie) }} /> */}
-              <input className='movie-card__toggle' type="checkbox" checked={userMovies.current.some(userMovie => userMovie.movieId === movie.movieId)}  id={movie.movieId} />
+              <input className='movie-card__toggle' type="checkbox" defaultChecked={userMovies.current.some(userMovie => userMovie.movieId === movie.movieId)}  id={movie.movieId} />
               <span
                 className='movie-card__logo movie-card__logo_type_save-button button'
                 onClick={(evt) => {

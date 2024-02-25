@@ -12,7 +12,7 @@ export default function Register({ onRegister }) {
     linkText: 'Войти',
     formName: 'register'
   }
-  const { handleChange, handleChangeWithEmailValidation, values, errors, isValid } = useFormWithValidation();
+  const { handleChange, handleChangeWithEmailValidation, values, errors, isValid } = useFormWithValidation(null);
   const handleSubmit = (evt) => {
     evt.preventDefault();
     setIsLoading(true);

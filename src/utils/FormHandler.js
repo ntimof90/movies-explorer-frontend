@@ -18,6 +18,11 @@ export function useFormWithValidation(initialValues = {}) {
   const [errors, setErrors] = React.useState({});
   const [isValid, setIsValid] = React.useState(false);
 
+  // React.useEffect(() => {
+  //   setValues(initialValues);
+  //   console.log('s222');
+  // }, [initialValues])
+
   const handleChange = (evt) => {
     setValues({...values, [evt.target.name]: evt.target.value});
     setErrors({...errors, [evt.target.name]: evt.target.validationMessage});

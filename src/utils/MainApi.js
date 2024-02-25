@@ -40,7 +40,10 @@ class MainApi {
   getUser(token) {
     return fetch(`${this._url}/users/me`, {
       method: 'GET',
-      headers: {'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json'},
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
     })
     .then(this._checkResponse);
   }
@@ -48,7 +51,10 @@ class MainApi {
   editUser({ email, name }, token) {
     return fetch(`${this._url}/users/me`, {
       method: 'PATCH',
-      headers: {'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json'},
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({ email, name })
     })
     .then(this._checkResponse);
@@ -57,7 +63,10 @@ class MainApi {
   saveMovie(movie, token) {
     return fetch(`${this._url}/movies`, {
       method: 'POST',
-      headers: {'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json'},
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(movie)
     })
       .then(this._checkResponse);
