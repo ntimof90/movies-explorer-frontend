@@ -1,18 +1,57 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import './Profile.css';
+import { useFormWithValidation } from '../../utils/FormHandler';
+import { CurrentUserContext } from '../../contexts/userContext';
 
-export default function Profile({ errors, handleChange, isValid }) {
+export default function Profile({ onSignOut }) {
+  const { user, updateUser } = useContext(CurrentUserContext);
+
+  const { handleChange, handleChangeWithEmailValidation, resetForm, values, errors, isValid } = useFormWithValidation(user);
+
   const [editMode, setEditMode] = React.useState(false);
+
+  const [submitMessage, setSubmitMessage] = React.useState('');
+
   const inputRef = React.createRef();
-  const handleClick = () => {
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onEditClick = () => {
+    setSubmitMessage('');
     setEditMode(true);
     inputRef.current.focus();
   }
+
+  const onCancelClick = () => {
+    setSubmitMessage('');
+    setEditMode(false);
+    if (values !== user) {
+      resetForm(user);
+    }
+  }
+
+  const onSaveClick = (evt) => {
+    evt.preventDefault();
+    setIsLoading(true);
+    updateUser(values)
+      .then((newUser) => {
+        setEditMode(false);
+        setSubmitMessage('Профиль успешно обновлен.');
+        resetForm(newUser);
+      })
+      .catch(e => {
+        if (e === 409) setSubmitMessage('Пользователь с таким email уже существует.')
+        else setSubmitMessage('При обновлении профиля произошла ошибка.')
+        resetForm(user);
+      })
+      .finally(() => setIsLoading(false));
+  }
+
   return (
     <div className='profile'>
       <div className="profile__container">
-        <h2 className='profile__title'>Привет, Виталий!</h2>
-        <form className='profile__form' action=''>
+        <h2 className='profile__title'>Привет, {values.name}</h2>
+        <form className='profile__form' action='' onSubmit={onSaveClick}>
           <label className='profile__input-label'>
             <span className='profile__input-title'>Имя</span>
             <input
@@ -23,10 +62,11 @@ export default function Profile({ errors, handleChange, isValid }) {
               required
               name='name'
               onChange={handleChange}
-              defaultValue={'Виталий'}
+              value={values.name}
               readOnly={!editMode}
               autoComplete='off'
               ref={inputRef}
+              placeholder='Ваше имя'
             />
             <span className={`profile__input-error ${errors.name ? 'profile__input-error_active': ''}`}>{errors.name}</span>
           </label>
@@ -37,17 +77,29 @@ export default function Profile({ errors, handleChange, isValid }) {
               type='email'
               required
               name='email'
-              onChange={handleChange}
+              onChange={handleChangeWithEmailValidation}
               autoComplete='off'
-              defaultValue={'dsf@sdfsd.com'}
+              value={values.email}
               readOnly={!editMode}
+              placeholder='Ваша почта'
             />
             <span className={`profile__input-error ${errors.email ? 'profile__input-error_active': ''}`}>{errors.email}</span>
           </label>
-          <button className={`profile__submit button ${editMode ? 'profile__submit_active' : ''}`} disabled={!isValid} type='submit'>Сохранить</button>
+          {submitMessage && <p className='profile__submit-message'>{submitMessage}</p>}
+          {editMode &&
+            <>
+              <button className='profile__button profile__button_type_submit link' disabled={!isValid || isLoading} type='submit'>{!isLoading ? 'Сохранить' : 'Подождите...'}</button>
+              <button className='profile__button link' type='button' onClick={onCancelClick}>Отменить</button>
+            </>
+          }
         </form>
-        <button className={`profile__button link ${editMode ? 'profile__button_inactive' : ''}`} type='button' onClick={handleClick}>Редактировать</button>
-        <button className={`profile__button link ${editMode ? 'profile__button_inactive' : ''}`} type='button'>Выйти из аккаунта</button>
+        {
+          !editMode &&
+          <>
+            <button className='profile__button link' type='button' onClick={onEditClick}>Редактировать</button>
+            <button className='profile__button link' type='button' onClick={onSignOut}>Выйти из аккаунта</button>
+          </>
+        }
       </div>
     </div>
   )

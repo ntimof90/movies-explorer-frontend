@@ -1,3 +1,6 @@
+.movie-card {
+  position: relative;
+}
 .movie-card:hover {
   cursor: pointer;
 }
@@ -46,7 +49,7 @@
   line-height: 0.9;
 }
 .movie-card__logo_type_check-mark {
-  display: none;
+  display: block;
   background-image: url(../../images/saved-icon.svg);
   width: 21px;
   height: 21px;
@@ -56,6 +59,9 @@
   right: 14px;
   border: none;
   border-radius: 10.5px;
+}
+.movie-card__logo_type_check-mark:hover {
+  background-image: url(../../images/delete-btn.svg);
 }
 .movie-card__toggle {
   display: none;
@@ -69,8 +75,7 @@
   border: none;
 }
 .movie-card__logo_type_save-button {
-  width: 72px;
-  height: 21px;
+  padding: 6px 7px;
   background-color: var(--button-bg-color, #313131);
   font-size: 10px;
   font-weight: 400;
@@ -86,10 +91,19 @@
   background-image: url(../../images/delete-btn.svg);
   border-radius: 10.5px;
 }
+.movie-card:hover .movie-card__logo_type_delete-button {
+  display: block;
+}
 .movie-card:hover .movie-card__toggle:not(:checked) + .movie-card__logo_type_delete-button {
   display: block;
 }
 .movie-card:hover .movie-card__toggle:not(:checked) + .movie-card__logo_type_save-button {
+  display: flex;
+}
+.movie-card:hover .movie-card__logo_type_delete-button {
+  display: block;
+}
+.movie-card:hover .movie-card__logo_type_save-button {
   display: flex;
 }
 .movie-card__check-logo {
@@ -115,9 +129,6 @@ label:hover {
   top: 14px;
   right: 14px;
 }
-/* label:hover .movie-card__checkbox:not(:checked) ~ .movie-card__save-logo {
-  display: block;
-} */
 
 @media screen and (max-width: 1024px) {
   .movie-card__header {
@@ -132,6 +143,11 @@ label:hover {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+  }
+}
+@media screen and (max-width: 768px) {
+  .movie-card__logo {
+    display: block;
   }
 }
 @media screen and (max-width: 425px) {

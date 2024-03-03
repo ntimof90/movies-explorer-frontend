@@ -4,18 +4,21 @@ import logoPath from '../../images/header-logo.svg';
 import './Header.css';
 import Navigation from "../Navigation/Navigation";
 
-export default function Header({loggedIn, onMenuClick}) {
+export default function Header({ loggedIn }) {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const handleMenuClick = () => {
-    setIsMenuOpen(true);
-  }
-  const handleClose = () => {
-    setIsMenuOpen(false);
-  }
+
+  const handleMenuClick = () => setIsMenuOpen(true);
+
+  const handleClose = () => setIsMenuOpen(false);
+
+  const handleLinkClassName = ({isActive}) => `header__menu-link link ${isActive ? 'header__menu-link_active' : ''}`;
+
   return (
     <>
-      <header className='header content-section'>
-        <Link className="logo-link" to='/'><img className='logo' src={logoPath} alt='Логотип.' /></Link>
+      <header className='header'>
+        <Link className='logo-link' to='/'>
+          <img className='logo' src={logoPath} alt='Логотип.' />
+        </Link>
         {
         !loggedIn
         ? <nav className ='header__menu header__menu_user_unauthorized'>
@@ -24,11 +27,11 @@ export default function Header({loggedIn, onMenuClick}) {
           </nav>
         : <>
             <nav className='header__menu header__menu_user_authorized'>
-              <NavLink to='/movies' className={({isActive}) => `header__menu-link link ${isActive ? 'header__menu-link_active' : ''}`}>Фильмы</NavLink>
-              <NavLink to='/saved-movies' className={({isActive}) => `header__menu-link link ${isActive ? 'header__menu-link_active' : ''}`}>Сохранённые фильмы</NavLink>
+              <NavLink to='/movies' className={handleLinkClassName}>Фильмы</NavLink>
+              <NavLink to='/saved-movies' className={handleLinkClassName}>Сохранённые фильмы</NavLink>
             </nav>
             <NavLink to='/profile' className='account-button button header__account-button'>Аккаунт</NavLink>
-            <button className='header__navigation-button button' type='button' onClick={handleMenuClick}></button>
+            <button className='header__navigation-button link' type='button' onClick={handleMenuClick}></button>
           </>
         }
       </header>

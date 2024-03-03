@@ -1,56 +1,88 @@
 import React from 'react';
-import './App.css';
+import { Routes, Route, Outlet } from 'react-router-dom';
+
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import Main from '../Main/Main';
-import { Routes, Route, Outlet } from 'react-router-dom';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import Login from '../Login/Login';
 import Register from '../Register/Register';
 import Profile from '../Profile/Profile';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
-import movieList from '../../vendor/cards';
+import ProtectedRouteComponent from '../ProtectedRouteComponent/ProtectedRouteComponent';
 
-function App() {
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [form, setForm] = React.useState({});
-  const [errors, setErrors] = React.useState({});
-  const [isFormValid, setIsFormValid] = React.useState(false);
-  const handleInputChange = (evt) => {
-    setForm({ ...form, [evt.target.name]: evt.target.value});
-    setErrors({ ...errors, [evt.target.name]: evt.target.validationMessage });
-    setIsFormValid(evt.target.closest('form').checkValidity());
-  }
-  const handleLoading = () => {
-    setIsLoading(true);
-  }
+import useAuth from '../../utils/useAuth';
+import { CurrentUserContextProvider } from '../../contexts/userContext';
+import useMoviesDatabase from '../../utils/useMoviesDatabase';
+
+import './App.css';
+
+export default function App() {
+  const { loggedIn, serverError, signIn, signUp, signOut, setServerError } = useAuth();
+
+  const { beatfilmMoviesDB, getbeatfilmMoviesDB } = useMoviesDatabase(setServerError);
+
   return (
-    <div className='page font-smoothed'>
-      <Routes>
-        <Route path='/' element={
-          <>
-            <Header loggedIn={true} />
-            <Outlet />
-            <Footer />
-          </>
-        }>
-          <Route path='' element={<Main />} />
-          <Route path='movies' element={<Movies movieList={movieList} isLoading={isLoading} handleLoading={handleLoading} />} />
-          <Route path='saved-movies' element={<SavedMovies movieList={movieList}/>} />
-        </Route>
-        <Route path='/profile' element={
-          <>
-            <Header loggedIn={true} />
-            <Profile handleChange={handleInputChange} errors={errors} isValid={isFormValid} />
-          </>
-        } />
-        <Route path='/signup' element={<Register handleChange={handleInputChange} errors={errors} isValid={isFormValid} />} />
-        <Route path='/signin' element={<Login handleChange={handleInputChange} errors={errors} isValid={isFormValid} />} />
-        <Route path='*' element={<PageNotFound />} />
-      </Routes>
-    </div>
+    <CurrentUserContextProvider loggedIn={loggedIn} setServerError={setServerError}>
+      <div className='page font-smoothed'>
+        <Routes>
+          <Route
+            path='/'
+            element={
+              <>
+                <Header loggedIn={loggedIn} />
+                <Outlet />
+                <Footer />
+              </>
+            }
+          >
+            <Route path='' element={ <Main /> } />
+            <Route
+              path='movies'
+              element={
+                <ProtectedRouteComponent
+                  component={Movies}
+                  loggedIn={loggedIn}
+                  beatfilmMoviesDB={beatfilmMoviesDB}
+                  getbeatfilmMoviesDB={getbeatfilmMoviesDB}
+                />
+              }
+            />
+            <Route
+              path='saved-movies'
+              element={
+                <ProtectedRouteComponent
+                  component={SavedMovies}
+                  loggedIn={loggedIn}
+                />
+              }
+            />
+          </Route>
+          <Route
+            path='/profile'
+            element={
+              <>
+                <Header loggedIn={loggedIn} />
+                <ProtectedRouteComponent
+                  component={Profile}
+                  loggedIn={loggedIn}
+                  onSignOut={signOut}
+                />
+              </>
+            }
+          />
+          <Route path='/signup' element={<Register onRegister={ signUp } />} />
+          <Route path='/signin' element={<Login onLogin={ signIn } />} />
+          <Route path='*' element={<PageNotFound />} />
+        </Routes>
+        {serverError &&
+          <div className='error-popup'>
+            <button className='error-popup__button button' onClick={() => {setServerError('')}}>&#215;</button>
+            {serverError}
+          </div>
+        }
+      </div>
+    </CurrentUserContextProvider>
   );
 }
-
-export default App;

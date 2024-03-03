@@ -4,6 +4,8 @@
   gap: 20px;
   padding-top: 79px;
   padding-bottom: 20px;
+  padding-left: 70px;
+  padding-right: 70px;
 }
 .footer__title {
   margin: 0;
@@ -38,14 +40,16 @@
 }
 @media screen and (max-width: 1024px) {
   .footer {
-    --side-margin: 30px;
+    padding-left: 30px;
+    padding-right: 30px;
   }
 }
 @media screen and (max-width: 768px) {}
 @media screen and (max-width: 625px) {}
 @media screen and (max-width: 425px) {
   .footer {
-    --side-margin: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
     gap: 30px;
   }
   .footer__title {

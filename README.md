@@ -9,5 +9,8 @@
 IP <158.160.137.127>
 
 Backend https://api.msearch.students.nomoredomainsmonster.ru
+
 Frontend https://msearch.students.nomoredomainsmonster.ru
+
+Pull request: https://github.com/ntimof90/movies-explorer-frontend/pull/2
 

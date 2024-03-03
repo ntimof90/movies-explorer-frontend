@@ -5,7 +5,7 @@ import './Techs.css';
 export default function Techs() {
   const techs = ['HTML', 'CSS', 'JS', 'React', 'Git', 'Express.js', 'mongoDB'];
   return (
-    <section className='techs content-section' id='techs'>
+    <section className='techs' id='techs'>
       <Heading>Технологии</Heading>
       <h3 className='techs__title'>7&nbsp;технологий</h3>
       <p className='techs__paragraph'>На&nbsp;курсе веб-разработки мы&nbsp;освоили технологии,
