@@ -12,11 +12,26 @@ export default function Login({ onLogin }) {
     formName: 'login'
   }
   const [isLoading, setIsLoading] = useState(false);
+  const [submitMessage, setSubmitMessage] = React.useState('');
   const { handleChange, handleChangeWithEmailValidation, values, errors, isValid } = useFormWithValidation(null);
   const handleSubmit = (evt) => {
     evt.preventDefault();
     setIsLoading(true);
-    onLogin(values).finally(() => setIsLoading(false));
+    onLogin(values)
+    .catch(e => {
+      switch (e) {
+        case 401:
+          setSubmitMessage('Вы ввели неправильный логин или пароль.');
+          break;
+        case 402:
+          setSubmitMessage('При авторизации произошла ошибка. Токен не передан или передан не в том формате.');
+          break;
+        default:
+          setSubmitMessage('При авторизации произошла ошибка. Переданный токен некорректен.');
+          break;
+      }
+    })
+    .finally(() => setIsLoading(false));
   }
 
   // const handleSubmit = (evt) => {
@@ -61,6 +76,7 @@ export default function Login({ onLogin }) {
         />
         <span className={`input-error ${errors.password ? 'input-error_active': ''}`}>{errors.password}</span>
       </label>
+      {submitMessage && <p className='auth__submit-message'>{submitMessage}</p>}
     </Auth>
   )
 }

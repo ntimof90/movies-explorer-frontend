@@ -1,39 +1,39 @@
 import React from 'react';
 import './SearchForm.css';
-import { findMovie } from '../../utils/MoviesApi';
-import { useForm } from '../../utils/FormHandler';
 
-export default function SearchForm({ handleLoading, handleMovies, onSubmit }) {
-  const { handleChange, values, setValues} = useForm();
+export default function SearchForm({
+  values,
+  setValues,
+  handleChange,
+  error,
+  handleSearch,
+  query,
+  handleChangeFormat,
+}) {
 
-  const handleSubmit = (evt) => {
-    evt.preventDefault();
-    onSubmit(values);
-    // evt.preventDefault();
-    // findMovie()
-    // .then((result) => handleMovies(result))
-    // .catch(e => console.log(e));
-  }
-  // const handleSubmit = (evt) => {
-  //   evt.preventDefault();
-  //   onSubmit(values);
-  // }
   return (
     <section className='search'>
-      <form className='search__form' name='movie' action='' onSubmit={handleSubmit}>
+      <form className='search__form' name='movie' action='' onSubmit={handleSearch}>
         <fieldset className='search__input-fieldset'>
           <input
             className='search__input input'
             type='text'
             placeholder='Фильм'
-            name='movie'
-            onChange={ handleChange }
-            required
+            name='name'
+            onChange={ (evt) => {handleChange(evt);} }
+            value={values.name || ''}
           />
           <button className='search__button button' type='submit'></button>
+          {error && <p className='search__submit-error'>Введите название фильма &uarr;</p>}
         </fieldset>
         <label className='search__checkbox-label'>
-          <input className='search__checkbox' name='isShort' type="checkbox" />
+          <input
+            className='search__checkbox'
+            name='durationFormat'
+            type="checkbox"
+            checked={values.durationFormat || false}
+            onChange={() => {setValues({...values, durationFormat: !values.durationFormat});
+            if (query) handleChangeFormat({...query, durationFormat: !values.durationFormat});}}/>
           <span className='search__custom-checkbox'></span>
           <span className='search__checkbox-title'>Короткометражки</span>
         </label>

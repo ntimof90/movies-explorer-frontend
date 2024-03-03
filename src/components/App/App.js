@@ -1,27 +1,30 @@
 import React from 'react';
-import './App.css';
+import { Routes, Route, Outlet } from 'react-router-dom';
+
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import Main from '../Main/Main';
-import { Routes, Route, Outlet } from 'react-router-dom';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import Login from '../Login/Login';
 import Register from '../Register/Register';
 import Profile from '../Profile/Profile';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
-import movieList from '../../vendor/cards';
 import ProtectedRouteComponent from '../ProtectedRouteComponent/ProtectedRouteComponent';
 
 import useAuth from '../../utils/useAuth';
-
 import { CurrentUserContextProvider } from '../../contexts/userContext';
+import useMoviesDatabase from '../../utils/useMoviesDatabase';
 
-function App() {
-  const { loggedIn, signIn, signUp, signOut } = useAuth();
+import './App.css';
+
+export default function App() {
+  const { loggedIn, serverError, signIn, signUp, signOut, setServerError } = useAuth();
+
+  const { beatfilmMoviesDB, getbeatfilmMoviesDB } = useMoviesDatabase(setServerError);
 
   return (
-    <CurrentUserContextProvider loggedIn={loggedIn}>
+    <CurrentUserContextProvider loggedIn={loggedIn} setServerError={setServerError}>
       <div className='page font-smoothed'>
         <Routes>
           <Route
@@ -41,7 +44,8 @@ function App() {
                 <ProtectedRouteComponent
                   component={Movies}
                   loggedIn={loggedIn}
-                  movieList={movieList}
+                  beatfilmMoviesDB={beatfilmMoviesDB}
+                  getbeatfilmMoviesDB={getbeatfilmMoviesDB}
                 />
               }
             />
@@ -51,7 +55,6 @@ function App() {
                 <ProtectedRouteComponent
                   component={SavedMovies}
                   loggedIn={loggedIn}
-                  movieList={movieList}
                 />
               }
             />
@@ -73,9 +76,13 @@ function App() {
           <Route path='/signin' element={<Login onLogin={ signIn } />} />
           <Route path='*' element={<PageNotFound />} />
         </Routes>
+        {serverError &&
+          <div className='error-popup'>
+            <button className='error-popup__button button' onClick={() => {setServerError('')}}>&#215;</button>
+            {serverError}
+          </div>
+        }
       </div>
     </CurrentUserContextProvider>
   );
 }
-
-export default App;

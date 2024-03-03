@@ -4,6 +4,7 @@ import { useFormWithValidation } from '../../utils/FormHandler';
 
 export default function Register({ onRegister }) {
   const [isLoading, setIsLoading] = useState(false);
+  const [submitMessage, setSubmitMessage] = React.useState('');
   const registerUi = {
     mainTitle: 'Добро пожаловать!',
     buttonText: 'Зарегистрироваться',
@@ -16,7 +17,23 @@ export default function Register({ onRegister }) {
   const handleSubmit = (evt) => {
     evt.preventDefault();
     setIsLoading(true);
-    onRegister(values).finally(() => setIsLoading(false));
+    onRegister(values)
+    .catch(e => {
+      switch (e) {
+        case 409:
+          setSubmitMessage('Пользователь с таким email уже существует.');
+          console.log(e);
+          break;
+        case 402:
+          setSubmitMessage('При авторизации произошла ошибка. Токен не передан или передан не в том формате.');
+          break;
+        default:
+          setSubmitMessage('При регистрации пользователя произошла ошибка.');
+          console.log(e);
+          break;
+      }
+    })
+    .finally(() => setIsLoading(false));
   }
   // React.useEffect(() => {
   //   return () => resetForm();
@@ -63,6 +80,7 @@ export default function Register({ onRegister }) {
         />
         <span className={`input-error ${errors.password ? 'input-error_active': ''}`}>{errors.password}</span>
       </label>
+      {submitMessage && <p className='auth__submit-message'>{submitMessage}</p>}
     </Auth>
   )
 }

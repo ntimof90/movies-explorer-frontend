@@ -4,6 +4,7 @@ import mainApi from './MainApi';
 
 export default function useAuth() {
   const [loggedIn, setLoggedIn] = useState(false);
+  const [serverError, setServerError] = useState('');
 
   const navigate = useNavigate();
 
@@ -14,9 +15,8 @@ export default function useAuth() {
           localStorage.setItem('jwt', result.token);
           setLoggedIn(true);
           navigate('/movies', { replace: true });
-        }
+        } else return Promise.reject(402);
       })
-      .catch(e => console.log(e))
   };
 
   const signUp = ({ name, email, password }) => {
@@ -27,12 +27,14 @@ export default function useAuth() {
           setLoggedIn(true);
           navigate('/movies', { replace: true });
         }
+        else return Promise.reject(402);
       })
-      .catch(e => console.log(e))
   };
 
   const signOut = () => {
     localStorage.removeItem('jwt');
+    localStorage.removeItem('currentQuery');
+    localStorage.removeItem('currentRender');
     setLoggedIn(false);
   }
 
@@ -43,9 +45,11 @@ export default function useAuth() {
       .then((result) => {
         if (result) setLoggedIn(true);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        setServerError('Ошибка авторизации')
+      });
     }
   }, []);
 
-  return { signIn, signUp, signOut, loggedIn };
+  return { signIn, signUp, signOut, setServerError, loggedIn, serverError };
 };

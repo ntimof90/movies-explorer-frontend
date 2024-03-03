@@ -107,7 +107,8 @@
 }
 @media screen and (max-width: 425px) {
   .about-project {
-    --side-margin: 18px;
+    padding-right: 4px;
+    padding-left: 4px;
     padding-top: 70px;
     padding-bottom: 69px;
   }

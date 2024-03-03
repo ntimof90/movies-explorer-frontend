@@ -1,7 +1,7 @@
 import React from 'react';
 
-export function useForm() {
-  const [values, setValues] = React.useState({});
+export function useForm(initialValues = {}) {
+  const [values, setValues] = React.useState(initialValues);
 
   const handleChange = (event) => {
     const target = event.target;
@@ -18,11 +18,6 @@ export function useFormWithValidation(initialValues = {}) {
   const [errors, setErrors] = React.useState({});
   const [isValid, setIsValid] = React.useState(false);
 
-  // React.useEffect(() => {
-  //   setValues(initialValues);
-  //   console.log('s222');
-  // }, [initialValues])
-
   const handleChange = (evt) => {
     setValues({...values, [evt.target.name]: evt.target.value});
     setErrors({...errors, [evt.target.name]: evt.target.validationMessage});
@@ -35,7 +30,7 @@ export function useFormWithValidation(initialValues = {}) {
   }
 
   const checkTopLevelDomain = (evt) => {
-    const emailRegEx = /\.[a-z]{2,4}$/;
+    const emailRegEx = /\.[a-z]{2,}$/;
     if (evt.target.checkValidity()) {
       if (!emailRegEx.test(evt.target.value)) {
         setErrors({...errors, [evt.target.name]: 'Требуется домен верхнего уровня'});

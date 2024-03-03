@@ -38,6 +38,15 @@
   border-radius: 5px;
   background-image: url(../../images/find-button.svg);
 }
+.search__submit-error {
+  position: absolute;
+  top: 135px;
+  color: var(--input-err-color, #EE3465);
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 1;
+  margin: 0;
+}
 
 .search__checkbox-label {
   display: flex;

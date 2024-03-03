@@ -45,7 +45,7 @@ class MainApi {
         'Content-Type': 'application/json'
       },
     })
-    .then(this._checkResponse);
+    .then(this._checkResponse)
   }
 
   editUser({ email, name }, token) {

@@ -1,200 +1,142 @@
-import React, { useCallback, useContext, useEffect, useState, useRef } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './Movies.css';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import Preloader from '../Preloader/Preloader';
-import mainApi from '../../utils/MainApi';
-import { findMovie } from '../../utils/MoviesApi';
 import { CurrentUserMoviesContext } from '../../contexts/userContext';
+import useRerenderByResize from '../../utils/useRerenderByResize';
+import { useForm } from '../../utils/FormHandler';
 
-export default function Movies({ movieList, handleLoading }) {
-  // const { userMovies, like } = useContext(CurrentUserMoviesContext);
-  const [movies, setMovies] = useState([]);
-  const userMovies = useContext(CurrentUserMoviesContext);
-  const movieDB = useRef([]);
-  // let movieDB.current = [];
-  const [renderList, setRenderList] = useState([]);
+export default function Movies({ beatfilmMoviesDB, getbeatfilmMoviesDB }) {
+  const { userMovies, deleteMovie, saveMovie } = useContext(CurrentUserMoviesContext);
 
-  const getInitialMovieList = () => {
-    findMovie()
-      .then(result => {
-        const initialMovies = result.map(movie => {
-          return {
-            country: movie.country,
-            director: movie.director,
-            duration: movie.duration,
-            year: movie.year,
-            description: movie.description,
-            image: `https://api.nomoreparties.co/${movie.image.url}`,
-            trailer: movie.trailerLink,
-            nameRU: movie.nameRU,
-            nameEN: movie.nameEN,
-            thumbnail: `https://api.nomoreparties.co/${movie.image.formats.thumbnail.url}`,
-            movieId: movie.id,
-          }
-        });
-        movieDB.current = initialMovies;
-        console.log(movieDB.current);
-        setMovies(initialMovies);
-      })
-      .catch(e => console.log(e));
-  }
-  // const handleLikeClick = (movie) => {
-  //   like(movie);
-  // }
-  // useEffect(() => {
-  //   getInitialMovieList();
-  // }, [])
-  const getMovies = (movies) => {
-    setMovies(movies);
-    console.log(movies)
-  }
-  const [isLoading, setIsLoading] = useState(false)
-  const handleSaveClick = (movie) => {
-    setIsLoading(true);
-    const token = localStorage.getItem('jwt');
-    return mainApi.saveMovie(movie, token)
-      .then(res => {
-        userMovies.current.push(res.movie);
-        handleChange();
-        })
-      .catch(e => console.log(e))
-      .finally(() => setIsLoading(false));
-  }
-  const handleDeleteClick = (id) => {
-    setIsLoading(true);
-    const token = localStorage.getItem('jwt');
+  const [isMovieDbLoading, setIsMovieDbLoading] = useState(false);
 
-    mainApi.deleteMovie(id, token)
-      .then(() => {
-        console.log(userMovies.current)
-        userMovies.current = userMovies.current.filter(item => item._id !== id)
-        console.log(userMovies.current)
-        // setRenderList((prevState => {
-        //   return prevState.filter(item => item._id !== id)
-        // }))
-        // userMovies.current = userMovies.current.filter(movie => movie._id !== id)
-      })
-      .catch(e => console.log(e))
-      .finally(() => setIsLoading(false));
-  }
-  const handleChange = (movie) => {
-  }
+  const [loadingCard, setLoadingCard] = useState('');
 
-  const handleSearch = async (query) => {
-    findMovie()
-      .then(result => {
-        const initialMovies = result.map(movie => {
-          return {
-            country: movie.country,
-            director: movie.director,
-            duration: movie.duration,
-            year: movie.year,
-            description: movie.description,
-            image: `https://api.nomoreparties.co/${movie.image.url}`,
-            trailer: movie.trailerLink,
-            nameRU: movie.nameRU,
-            nameEN: movie.nameEN,
-            thumbnail: `https://api.nomoreparties.co/${movie.image.formats.thumbnail.url}`,
-            movieId: movie.id,
-          }
-        });
-        movieDB.current = initialMovies;
-      })
-      .then(() => {
-        const respond = onSearch(query);
-        setRenderList(respond);
-      })
-    // try {
-    //   if (movieDB.current.length === 0) {
-    //     await getInitialMovieList();
-    //   }
-    //   const respond = onSearch(query);
-    //   setRenderList(respond);
-    // } catch (e) {
+  const currentQuery = JSON.parse(localStorage.getItem('currentQuery')) || {};
+  const currentRender = JSON.parse(localStorage.getItem('currentRender')) || [];
 
-    // }
-    // // setSubmitMessage('');
-    // if (movieDB.current.length === 0) {
-    //   getInitialMovieList();
-    // }
-    // const respond = onSearch(query);
-    // console.log(respond);
-    // setRenderList(respond);
-    // if (respond.length === 0) setSubmitMessage('Ничего не найдено')
-    // setRenderList(onSearch(query));
-    // const searchResult = myMovies.filter(myMovie => {
-    //   return myMovie.nameRU.toLowerCase().includes(query.movie.toLowerCase())
-    // })
-    // setSearchingResult(searchResult);
-  }
-  const onSearch = (query) => {
-    const ruRegEx = /[абвгдеёжзийклмнопрстуфхцчшщъыьэюя]/i;
-    console.log(query);
-    if (ruRegEx.test(query.movie)) {
-      return movieDB.current.filter(movie => {
-        console.log(query.movie);
-        return movie.nameRU.toLowerCase().includes(query.movie.toLowerCase())
-      })
-    } else {
-      return movieDB.current.filter(movie => movie.nameEN.toLowerCase().includes(query.movie.toLowerCase()))
+  const { values, setValues, handleChange } = useForm(currentQuery)
+  const [query, setQuery] = useState(null);
+  const [error, setError] = useState(false);
+  const [searchResult, setSearchResult] = useState(currentRender);
+
+  const handleSearch = (evt) => {
+    evt.preventDefault();
+    if (!values.name) {
+      setQuery(null);
+      setError(true);
+    }
+    else {
+      setError(false);
+      if (beatfilmMoviesDB.current.length === 0) {
+        setIsMovieDbLoading(true)
+        getbeatfilmMoviesDB()
+          .then(() => {
+            setQuery(values);
+            setIsMovieDbLoading(false);
+          })
+      } else setQuery(values);
     }
   }
-  // const onSaveMovie = (movie) => {
-  //   const token = localStorage.getItem('jwt');
-  //   mainApi.saveMovie(movie, token)
-  //   .catch(e => console.log(e));
-  // }
-  // useEffect(() => {
-  //   const token = localStorage.getItem('jwt');
-  //   const getSavedMovies = (token) => {
-  //     mainApi.getMyMovies(token)
-  //     .then(result => {
-  //       console.log(result.movies)
-  //       // const myMoviesId = result.movies.map(item => { return item.movieId });
 
-  //       setRenderList(result.movies);
-  //     })
-  //     .catch(e => console.log(e));
-  //   }
-  //   getSavedMovies(token);
-  // }, []);
+  const handleQuery = (query, movies) => {
+    const { name, durationFormat} = query;
 
-  const isSaved = (id) => userMovies.current.some(movie => movie.movieId === id);
+    const handleName = (name, item) => {
+      if (/[абвгдеёжзийклмнопрстуфхцчшщъыьэюя]/.test(name.toLowerCase())) return item.nameRU.toLowerCase().includes(name.toLowerCase());
+      else return item.nameEN.toLowerCase().includes(name.toLowerCase());
+    }
+    const handleDurationFormat = (isShortFormat, item) => {
+      if (isShortFormat) return item.duration <= 40;
+      else return true;
+    }
 
-  const [checked, setChecked] = useState(false)
+    return movies.filter(item => handleName(name, item) && handleDurationFormat(durationFormat, item));
+  }
+
+  const handleChangeFormat = (value) => {
+      if (beatfilmMoviesDB.current.length === 0) {
+        setIsMovieDbLoading(true)
+        getbeatfilmMoviesDB()
+          .then(() => {
+            setQuery(value);
+            setIsMovieDbLoading(false);
+          })
+      } else setQuery(value);
+  }
+
+  const handleDeleteClick = (id) => {
+    deleteMovie(id)
+      .finally(() => setLoadingCard(''));
+  }
+
+  const handleSaveClick = (movie) => {
+    setLoadingCard(movie.movieId)
+    saveMovie(movie)
+      .finally(() => setLoadingCard(''));
+  }
+
+  const { rerenderResult, handleMoreClick } = useRerenderByResize(searchResult)
+
+  useEffect(() => {
+    if (query && !isMovieDbLoading) {
+      localStorage.setItem('currentQuery', JSON.stringify(query));
+      const result = handleQuery(query, beatfilmMoviesDB.current)
+      setSearchResult(result);
+      localStorage.setItem('currentRender', JSON.stringify(result));
+    }
+  }, [query, isMovieDbLoading, beatfilmMoviesDB]);
 
   return (
     <main className='movie-section content-section'>
-      <SearchForm handleLoading={handleLoading} onSubmit={handleSearch}/>
-      <MoviesCardList isLoading={isLoading} >
-        {renderList.map((movie) => (
-          <li key={movie.movieId}>
-            <MoviesCard movie={movie}>
-              {/* <input className='movie-card__toggle' type="checkbox" defaultChecked={isSaved(movie.movieId)}  id={movie.movieId} onChange={(evt) => { setChecked(!checked); handleSaveClick(movie) }} /> */}
-              <input className='movie-card__toggle' type="checkbox" defaultChecked={userMovies.current.some(userMovie => userMovie.movieId === movie.movieId)}  id={movie.movieId} />
-              <span
-                className='movie-card__logo movie-card__logo_type_save-button button'
-                onClick={(evt) => {
-                  handleSaveClick(movie)
-                  // console.log(evt.target.closest('checkbox'))
-                }}
-              >
-                Сохранить
-              </span>
-              <span
-                className='movie-card__logo movie-card__logo_type_check-mark button'
-                onClick={(evt) => {
-                  const userMovie = userMovies.current.find(mov => mov.movieId === movie.movieId);
-                  handleDeleteClick(userMovie._id);
-                 }}>
-              </span>
-            </MoviesCard>
-          </li>
-        ))}
-      </MoviesCardList>
-      <button className='movie-list__cardloader button'>Ещё</button>
+      <SearchForm
+        values={values}
+        setValues={setValues}
+        handleChange={handleChange}
+        error={error}
+        handleSearch={handleSearch}
+        setQuery={setQuery}
+        query={query}
+        handleChangeFormat={handleChangeFormat}
+      />
+      {isMovieDbLoading
+        ? <Preloader />
+        : searchResult.length === 0 && query
+            ? <p className='movie-section__submit'>Ничего не найдено</p>
+            : <>
+                <MoviesCardList >
+                  {rerenderResult.map((movie) => (
+                    <li key={movie.movieId}>
+                      <MoviesCard movie={movie} isLoading={(loadingCard === movie.movieId)}>
+                        {!userMovies.some(userMovie => userMovie.movieId === movie.movieId)
+                        ? <span
+                            className='movie-card__logo movie-card__logo_type_save-button button'
+                            onClick={() => {
+                              handleSaveClick(movie)
+                            }}
+                          >
+                            Сохранить
+                          </span>
+                        : <span
+                            className='movie-card__logo_type_check-mark button'
+                            onClick={() => {
+                              setLoadingCard(movie.movieId);
+                              const userMovie = userMovies.find(userMovie => userMovie.movieId === movie.movieId);
+                              handleDeleteClick(userMovie._id);
+                            }}
+                          >
+                          </span>
+                        }
+                      </MoviesCard>
+                    </li>
+                  ))}
+                </MoviesCardList>
+                {rerenderResult.length < searchResult.length && <button className='movie-list__cardloader button' onClick={handleMoreClick}>Ещё</button>}
+              </>
+      }
     </main>
   )
 }

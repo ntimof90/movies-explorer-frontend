@@ -1,21 +1,22 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import './Profile.css';
 import { useFormWithValidation } from '../../utils/FormHandler';
 import { CurrentUserContext } from '../../contexts/userContext';
 
-export default function Profile( { onSignOut }) {
-  const { user, isInitialLoading, updateUser } = useContext(CurrentUserContext);
+export default function Profile({ onSignOut }) {
+  const { user, updateUser } = useContext(CurrentUserContext);
+
   const { handleChange, handleChangeWithEmailValidation, resetForm, values, errors, isValid } = useFormWithValidation(user);
+
   const [editMode, setEditMode] = React.useState(false);
+
   const [submitMessage, setSubmitMessage] = React.useState('');
+
   const inputRef = React.createRef();
+
   const [isLoading, setIsLoading] = useState(false);
 
-  // useEffect(() => {
-  //   console.log('sddsddd');
-  // }, []);
-
-  const handleClick = () => {
+  const onEditClick = () => {
     setSubmitMessage('');
     setEditMode(true);
     inputRef.current.focus();
@@ -29,7 +30,7 @@ export default function Profile( { onSignOut }) {
     }
   }
 
-  const handleSubmit = (evt) => {
+  const onSaveClick = (evt) => {
     evt.preventDefault();
     setIsLoading(true);
     updateUser(values)
@@ -49,8 +50,8 @@ export default function Profile( { onSignOut }) {
   return (
     <div className='profile'>
       <div className="profile__container">
-        <h2 className='profile__title'>Привет, {isInitialLoading ? '…' : values.name}</h2>
-        <form className='profile__form' action='' onSubmit={handleSubmit}>
+        <h2 className='profile__title'>Привет, {values.name}</h2>
+        <form className='profile__form' action='' onSubmit={onSaveClick}>
           <label className='profile__input-label'>
             <span className='profile__input-title'>Имя</span>
             <input
@@ -61,7 +62,7 @@ export default function Profile( { onSignOut }) {
               required
               name='name'
               onChange={handleChange}
-              value={isInitialLoading ? '…' : values.name || ''}
+              value={values.name}
               readOnly={!editMode}
               autoComplete='off'
               ref={inputRef}
@@ -78,7 +79,7 @@ export default function Profile( { onSignOut }) {
               name='email'
               onChange={handleChangeWithEmailValidation}
               autoComplete='off'
-              value={isInitialLoading ? '…' : values.email || ''}
+              value={values.email}
               readOnly={!editMode}
               placeholder='Ваша почта'
             />
@@ -95,8 +96,8 @@ export default function Profile( { onSignOut }) {
         {
           !editMode &&
           <>
-            <button className='profile__button link' type='button' disabled={isInitialLoading} onClick={handleClick}>Редактировать</button>
-            <button className='profile__button link' type='button' disabled={isInitialLoading} onClick={onSignOut}>Выйти из аккаунта</button>
+            <button className='profile__button link' type='button' onClick={onEditClick}>Редактировать</button>
+            <button className='profile__button link' type='button' onClick={onSignOut}>Выйти из аккаунта</button>
           </>
         }
       </div>

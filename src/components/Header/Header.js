@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Link, NavLink } from 'react-router-dom';
 import logoPath from '../../images/header-logo.svg';
 import './Header.css';
@@ -15,7 +15,7 @@ export default function Header({ loggedIn }) {
 
   return (
     <>
-      <header className='header content-section'>
+      <header className='header'>
         <Link className='logo-link' to='/'>
           <img className='logo' src={logoPath} alt='Логотип.' />
         </Link>

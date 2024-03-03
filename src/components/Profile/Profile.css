@@ -138,6 +138,9 @@
   .profile__button {
     transform: translateY(-40px);
   }
+  .profile__submit-message {
+    bottom: 100px;
+  }
 }
 @media screen and (max-width: 425px) {
   .profile__container {
@@ -150,5 +153,10 @@
   }
   .profile__button {
     transform: none;
+  }
+  .profile__submit-message {
+    position: relative;
+    bottom: 0;
+    margin-top: auto;
   }
 }

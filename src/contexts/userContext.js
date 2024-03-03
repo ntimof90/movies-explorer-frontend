@@ -1,18 +1,17 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { createContext, useEffect, useState, useRef } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import mainApi from '../utils/MainApi';
 
 export const CurrentUserContext = createContext();
 
 export const CurrentUserMoviesContext = createContext();
 
-// export const CurrentUserContextConsumer = CurrentUserContext.Consumer;
-// export const CurrentUserMoviesContextConsumer = CurrentUserMoviesContext.Consumer;
-
-const createUserContextValue = (loggedIn) => {
+const createUserContextValue = (loggedIn, setServerError) => {
   const [user, setUser] = useState({});
-  // const [isInitialLoading, setUserLoading] = useState(false);
-  const userMovies = useRef([]);
+
+  const [isUserLoading, setIsUserLoading] = useState(false);
+
+  const [userMovies, setUserMovies] = useState([])
 
   const updateUser = (newUser) => {
     const token = localStorage.getItem('jwt');
@@ -25,35 +24,54 @@ const createUserContextValue = (loggedIn) => {
   };
 
   useEffect(() => {
-    // setIsLoading(true);
     const fetchUserData = (token) => {
-      // setUserLoading(true);
+      setIsUserLoading(true);
       Promise.all([mainApi.getUser(token), mainApi.getMyMovies(token)])
         .then(([user, movies]) => {
           const { name, email } = user.user;
           setUser({ name, email });
-          userMovies.current = movies.movies;
-          console.log('sdfds');
+          setUserMovies(movies.movies);
         })
-        .catch(e => console.log(e))
-        // .finally(() => setUserLoading(false))
+        .catch(e => setServerError('500 На сервере произошла ошибка.'))
+        .finally(() => setIsUserLoading(false))
     }
 
     if (loggedIn) {
       const token = localStorage.getItem('jwt');
       fetchUserData(token);
     } else setUser({});
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loggedIn]);
 
-  return { user, userMovies, updateUser };
+  const deleteMovie = (id) => {
+    const token = localStorage.getItem('jwt');
+    return mainApi.deleteMovie(id, token)
+      .then(() => {
+        setUserMovies((prevState => {
+          return prevState.filter(item => item._id !== id)
+        }))
+      })
+      .catch(e => setServerError('500 На сервере произошла ошибка.'))
+  }
+
+  const saveMovie = (movie) => {
+    const token = localStorage.getItem('jwt');
+    return mainApi.saveMovie(movie, token)
+      .then((savedMovie) => {
+        setUserMovies([...userMovies, savedMovie.movie])
+      })
+      .catch(e => setServerError('500 На сервере произошла ошибка.'));
+  }
+
+  return { user, isUserLoading, userMovies, updateUser, deleteMovie, saveMovie };
 };
 
-export const CurrentUserContextProvider = ({ loggedIn, children }) => {
-  const { user, userMovies, updateUser } = createUserContextValue(loggedIn);
+export const CurrentUserContextProvider = ({ loggedIn, setServerError, children }) => {
+  const { user, isUserLoading, userMovies, updateUser, deleteMovie, saveMovie } = createUserContextValue(loggedIn, setServerError);
 
   return (
-    <CurrentUserContext.Provider value={ { user, updateUser } }>
-      <CurrentUserMoviesContext.Provider value={ userMovies }>
+    <CurrentUserContext.Provider value={ { user, isUserLoading, updateUser } }>
+      <CurrentUserMoviesContext.Provider value={ { userMovies, isUserLoading, deleteMovie, saveMovie } }>
         { children }
       </CurrentUserMoviesContext.Provider>
     </CurrentUserContext.Provider>
